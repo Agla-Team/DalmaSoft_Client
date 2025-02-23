@@ -19,26 +19,6 @@ export default function RightPanel({ refreshTrigger }) {
   const recordsPerPage = 6;
 
   useEffect(() => {
-    async function fetchCounts() {
-      try {
-        const res = await fetch(`${backUrl}/api/inventario/counts`);
-        const data = await res.json();
-        setCounts(data);
-      } catch (error) {
-        console.error("Errore nel recupero dei conteggi:", error);
-      }
-    }
-
-    async function fetchBrands() {
-      try {
-        const res = await fetch(`${backUrl}/api/inventario/brands`);
-        const data = await res.json();
-        setBrands(data);
-      } catch (error) {
-        console.error("Errore nel recupero dei brand:", error);
-      }
-    }
-
     async function fetchNonInventariate() {
       try {
         const res = await fetch(`${backUrl}/api/inventario/non-inventariate`);
@@ -53,8 +33,6 @@ export default function RightPanel({ refreshTrigger }) {
       }
     }
 
-    fetchCounts();
-    fetchBrands();
     fetchNonInventariate();
   }, [refreshTrigger]);
 
@@ -74,50 +52,15 @@ export default function RightPanel({ refreshTrigger }) {
 
   return (
     <div className="space-y-6">
-      {/* Riga superiore: due card affiancate */}
-      <div className="flex space-x-6">
-        {/* Card 1: Conteggio Auto */}
-        <Card className="flex-1 shadow-md">
-          <CardHeader>
-            <CardTitle className="text-lg font-semibold">Conteggio Auto</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-gray-700">
-              <strong>Auto Nuove In Stock:</strong> {counts.inStock}
-            </p>
-            <p className="text-gray-700">
-              <strong>Auto Inventariate:</strong> {counts.inventariate}
-            </p>
-          </CardContent>
-        </Card>
-
-        {/* Card 2: Auto per Brand */}
-        <Card className="flex-1 shadow-md">
-          <CardHeader>
-            <CardTitle className="text-lg font-semibold">Auto per Brand</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {brands.length > 0 ? (
-              brands.map((b, index) => (
-                <p key={index} className="text-gray-700">
-                  <strong>{b.marca}:</strong> {b.count || b.dataValues?.count || 0}
-                </p>
-              ))
-            ) : (
-              <p className="text-gray-500">Nessun dato disponibile.</p>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-
+      
       {/* Prima tabella: Auto Nuove non inventariate (validRecords) con paginazione */}
       <Card className="shadow-md">
-        <CardHeader>
-          <CardTitle className="scroll-m-20 text-xl font-semibold tracking-tight">
-            Auto Nuove non Inventariate
+        <CardHeader className="p-2 bg-gradient-to-br from-slate-600 to-slate-500 rounded-t">
+          <CardTitle className="text-sm text-white font-light">
+            Auto da Inventariare
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-2">
           <Table>
             <TableHeader>
               <TableRow>
@@ -153,7 +96,7 @@ export default function RightPanel({ refreshTrigger }) {
             <button
               onClick={goToPreviousPage}
               disabled={currentPage === 1}
-              className={`px-4 py-2 rounded ${currentPage === 1 ? "bg-gray-300" : "bg-blue-500 text-white hover:bg-blue-600"}`}
+              className={`px-4 py-2 rounded ${currentPage === 1 ? "bg-gray-300" : "bg-yellow-500 text-white hover:bg-yellow-600"}`}
             >
               Precedente
             </button>
@@ -163,7 +106,7 @@ export default function RightPanel({ refreshTrigger }) {
             <button
               onClick={goToNextPage}
               disabled={currentPage === totalPages || totalPages === 0}
-              className={`px-4 py-2 rounded ${currentPage === totalPages || totalPages === 0 ? "bg-gray-300" : "bg-blue-500 text-white hover:bg-blue-600"}`}
+              className={`px-4 py-2 rounded ${currentPage === totalPages || totalPages === 0 ? "bg-gray-300" : "bg-yellow-500 text-white hover:bg-yellow-600"}`}
             >
               Successiva
             </button>
@@ -173,9 +116,9 @@ export default function RightPanel({ refreshTrigger }) {
 
       {/* Seconda tabella: Auto Nuove non inventariate con telaio nullo o vuoto */}
       <Card className="shadow-md">
-        <CardHeader>
-          <CardTitle className="scroll-m-20 text-xl font-semibold tracking-tight">
-            Auto Nuove non Inventariate (incomplete)
+        <CardHeader className="p-2 bg-gradient-to-br from-slate-600 to-slate-500 rounded-t">
+          <CardTitle className="text-sm text-white font-light">
+            Auto con dati incompleti da INFINITY
           </CardTitle>
         </CardHeader>
         <CardContent>

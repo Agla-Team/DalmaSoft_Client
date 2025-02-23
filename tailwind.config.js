@@ -22,7 +22,10 @@ export default {
   				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
   				border: 'hsl(var(--sidebar-border))',
   				ring: 'hsl(var(--sidebar-ring))'
-  			}
+  			},
+			//border: "#E5E7EB",
+			//background: "#F8FAFC",
+			//foreground: "#1F2937"
   		},
   		keyframes: {
   			'accordion-down': {
@@ -45,7 +48,11 @@ export default {
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out'
-  		}
+  		},
+		/*
+		ringColor: {
+			50: "#E0E7FF", // Definizione di un colore per il ring
+		},*/
   	}
   },
   plugins: [require("tailwindcss-animate")],

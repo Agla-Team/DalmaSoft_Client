@@ -5,6 +5,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import UserDashboard from "./pages/UserDashboard";
 import UserControl from "./pages/UserManagement";
 import AutoGest from "./pages/autoGest";
+import AutoNewInfinityInterne from "./pages/nuoveListInfinity"
 import Inventory_New from "./pages/Inventory_New";
 import InventariatePage from "./pages/InventariatePage";
 import ProtectedRoute from "./assets/ProtectedRoute"; // Import corretto
@@ -25,6 +26,8 @@ function App() {
         <Route path="/autoPark" element={<AutoGest />} />
         <Route path="/invent_nuove" element={<Inventory_New />} />
         <Route path="/inventariate" element={<InventariatePage />} />
+        {/*ROTTE LISTE AUTO */}
+        <Route path="/infinity_interno" element={<AutoNewInfinityInterne />} />
       </Route>
 
       {/* Redirect per tutte le route non esistenti */}
