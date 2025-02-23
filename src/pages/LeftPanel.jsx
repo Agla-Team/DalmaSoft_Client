@@ -331,11 +331,6 @@ export default function LeftPanel({ onConfirm, onTelaioChange, refreshTrigger })
               className="w-full border border-gray-300 focus:border-red-500 focus:ring-red-500 rounded p-2"
             >
               <option value="In_Stock">In Stock</option>
-              <option value="Assegnato">Assegnato</option>
-              <option value="Richiesto">Richiesto</option>
-              <option value="Ordinato">Ordinato</option>
-              <option value="Da_Ritirare">Da Ritirare</option>
-              <option value="Stornato">Stornato</option>
               <option value="Venduto">Venduto</option>
             </select>
           </div>

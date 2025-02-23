@@ -18,7 +18,7 @@ import {
 export function NavMain({ items }) {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel className="text-red-800">Parco Auto</SidebarGroupLabel>
+      <SidebarGroupLabel className="text-red-800 uppercase font-bold text-xs px-3 py-2">Parco Auto</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
           <Collapsible
@@ -38,14 +38,20 @@ export function NavMain({ items }) {
               <CollapsibleContent>
                 <SidebarMenuSub>
                   {item.items?.map((subItem) => (
+                    subItem.isTitle ? (  // ⬅️ Controllo se è un titolo di sezione
+                      <div key={subItem.title} className="text-red-800 uppercase font-bold text-xs px-3 py-2">
+                      {subItem.title}
+                    </div>
+                  ) : (
                     <SidebarMenuSubItem key={subItem.title}>
                       <SidebarMenuSubButton asChild>
-                        <a href={subItem.url}>
+                        <a href={subItem.url} className={subItem.className || ""}>
                           <span>{subItem.title}</span>
                         </a>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
-                  ))}
+                  )
+                ))}
                 </SidebarMenuSub>
               </CollapsibleContent>
             </SidebarMenuItem>

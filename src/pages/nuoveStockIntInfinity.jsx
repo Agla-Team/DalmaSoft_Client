@@ -5,6 +5,8 @@ import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label"
 import { ChevronDown, ChevronUp } from "lucide-react";
 import {
     Pagination,
@@ -19,10 +21,11 @@ const backUrl = import.meta.env.VITE_BACKEND_URL;
 const frontUrl = import.meta.env.VITE_FRONT_URL;
 
 export default function AutoTable() {
-    const [auto, setAuto] = useState([]);
+    const [auto, setAuto] = useState({ autoConLogo: [] });
     const [loading, setLoading] = useState(true);
     const [expandedRow, setExpandedRow] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
+    const [searchTerm, setSearchTerm] = useState("");
     const rowsPerPage = 20;
   
     useEffect(() => {
@@ -42,39 +45,111 @@ export default function AutoTable() {
     setExpandedRow(expandedRow === id ? null : id);
   };
 
+  const autoList = auto.autoConLogo || [];
+
+  // Funzione per filtrare le auto in base alla ricerca
+  const filteredRows = autoList.filter(car => {
+    const searchTerms = searchTerm.toLowerCase().split(",").map(term => term.trim()); // Divide i termini con la virgola
+
+    return searchTerms.every(term => 
+      car.marca?.toLowerCase().includes(term) || 
+      car.telaio?.toLowerCase().includes(term) ||
+      car.modello?.toLowerCase().includes(term) ||
+      car.targa?.toLowerCase().includes(term) ||
+      car.descr_versione?.toLowerCase().includes(term) ||
+      car.alimentazione?.toLowerCase().includes(term) ||
+      car.descr_ubicazione?.toLowerCase().includes(term)
+    );
+  });
+
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = auto.slice(indexOfFirstRow, indexOfLastRow);
-  const totalPages = Math.ceil(auto.length / rowsPerPage);
+  const currentRows = filteredRows.slice(indexOfFirstRow, indexOfLastRow);
+  const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
 
   return (
     <div className="p-6">
 
-      <Card className=" flex-1 border border-slate-700 rounded-md">
+      {/* 5 Card Principali */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 pb-4">
+        <Card className="border border-red-700 rounded-md">
+          <CardHeader className="p-2 bg-gradient-to-br from-red-800 to-red-700 rounded-t">
+            <CardTitle className="text-sm text-white font-light">Auto In Stock presenti in DALMA</CardTitle>
+          </CardHeader>
+          <CardContent className="p-4 pt-1">
+            <p className="text-2xl font-bold">{auto.totaleAuto} veicoli</p>
+            <p className="text-lg text-gray-500">Valore: €{auto.autoConLogo?.reduce((acc, car) => acc + (car.pricePlusVat || 0), 0).toLocaleString() || "0,00"}</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border border-yellow-600 rounded-md">
+          <CardHeader className="p-2 bg-gradient-to-br from-yellow-600 to-yellow-500 rounded-t">
+            <CardTitle className="text-sm text-white font-light">{auto.conteggioPerSede?.[0]?.sede || "-"}</CardTitle>
+          </CardHeader>
+          <CardContent className="p-4 pt-1">
+            <p className="text-2xl font-bold">{auto.conteggioPerSede?.[0]?.numero_auto || 0} {auto.conteggioPerSede?.[0]?.numero_auto === 1 ? "veicolo" : "veicoli"}</p>
+            <p className="text-lg text-gray-500">Valore: €{auto.conteggioPerSede?.[0]?.totale_prezzo.toLocaleString() || "0,00"}</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border border-yellow-600 rounded-md">
+          <CardHeader className="p-2 bg-gradient-to-br from-yellow-600 to-yellow-500 rounded-t">
+            <CardTitle className="text-sm text-white font-light">{auto.conteggioPerSede?.[1]?.sede || "-"}</CardTitle>
+          </CardHeader>
+          <CardContent className="p-4 pt-1">
+            <p className="text-2xl font-bold">{auto.conteggioPerSede?.[1]?.numero_auto || 0} {auto.conteggioPerSede?.[1]?.numero_auto === 1 ? "veicolo" : "veicoli"}</p>
+            <p className="text-lg text-gray-500">Valore: €{auto.conteggioPerSede?.[1]?.totale_prezzo.toLocaleString() || "0,00"}</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border border-yellow-600 rounded-md">
+          <CardHeader className="p-2 bg-gradient-to-br from-yellow-600 to-yellow-500 rounded-t">
+            <CardTitle className="text-sm text-white font-light">{auto.conteggioPerSede?.[2]?.sede || "-"}</CardTitle>
+          </CardHeader>
+          <CardContent className="p-4 pt-1">
+            <p className="text-2xl font-bold">{auto.conteggioPerSede?.[2]?.numero_auto || 0} {auto.conteggioPerSede?.[2]?.numero_auto === 1 ? "veicolo" : "veicoli"}</p>
+            <p className="text-lg text-gray-500">Valore: €{auto.conteggioPerSede?.[2]?.totale_prezzo.toLocaleString() || "0"}</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="col-span-2 pb-4">
+        <Label htmlFor="search">Cerca</Label>
+        <Input 
+          id="search"
+          type="text" 
+          placeholder="Cerca per Marca, Telaio, Modello, Targa..." 
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full p-2 bg-gradient-to-br from-gray-200 to-gray-100 text-black border rounded-md"
+        />
+      </div>
+
+      <Card className="flex-1 border border-slate-700 rounded-md p-0">
         <CardHeader className="p-2 bg-gradient-to-br from-slate-600 to-slate-500 rounded-t">
             <CardTitle className="text-sm text-white font-light">
             Lista Auto in Stock presenti in DALMA
             </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-0">
           <div className="overflow-x-auto">
             <Table>
-              <TableHeader>
+              <TableHeader className="bg-gray-200">
                 <TableRow>
                   <TableHead></TableHead>
-                  <TableHead>Marca</TableHead>
-                  <TableHead>Modello</TableHead>
-                  <TableHead>Versione</TableHead>
-                  <TableHead>Colore</TableHead>
-                  <TableHead>Linea</TableHead>
-                  <TableHead>Targa</TableHead>
-                  <TableHead>Telaio</TableHead>
-                  <TableHead>KM</TableHead>
-                  <TableHead>Data Imm.</TableHead>
-                  <TableHead>Alimentazione</TableHead>
-                  <TableHead>Azienda</TableHead>
-                  <TableHead>Ubicazione</TableHead>
-                  <TableHead>Status</TableHead>
+                  <TableHead className="text-red-800">Marca</TableHead>
+                  <TableHead className="text-red-800">Modello</TableHead>
+                  <TableHead className="text-red-800">Versione</TableHead>
+                  <TableHead className="text-red-800">Colore</TableHead>
+                  <TableHead className="text-red-800">Linea</TableHead>
+                  <TableHead className="text-red-800">Targa</TableHead>
+                  <TableHead className="text-red-800">Telaio</TableHead>
+                  <TableHead className="text-red-800">KM</TableHead>
+                  <TableHead className="text-red-800">Data Imm.</TableHead>
+                  <TableHead className="text-red-800">Alimentazione</TableHead>
+                  <TableHead className="text-red-800">Azienda</TableHead>
+                  <TableHead className="text-red-800">Ubicazione</TableHead>
+                  <TableHead className="text-red-800">Status</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -104,7 +179,13 @@ export default function AutoTable() {
                         <TableCell>{car.modello}</TableCell>
                         <TableCell>{car.descr_versione}</TableCell>
                         <TableCell>{car.descr_colore || "N/D"}</TableCell>
-                        <TableCell>{car.descr_linea}</TableCell>
+                        <TableCell>{car.descr_linea === "Prodotto DEMO" || car.descr_linea === "Prodotto KM0" ? (
+                                                    <span className="text-yellow-500">{car.descr_linea}</span>
+                                                ) : car.descr_linea === "Prodotto NORMALE" ? (
+                                                    <span className="text-green-800">{car.descr_linea}</span>
+                                                ) : (
+                                                    <span>{car.descr_linea || "-"}</span>
+                                                )}</TableCell>
                         <TableCell>{car.targa}</TableCell>
                         <TableCell>{car.telaio}</TableCell>
                         <TableCell>{car.km_percorsi}</TableCell>
@@ -238,52 +319,6 @@ export default function AutoTable() {
                                         </div>
                                     </TableCell>
                                     </TableRow>
-                                    
-
-
-
-
-
-
-                                    {/*
-                                    <div className="text-md font-semibold pb-2">
-                                        [{car.codice_marca}] {car.marca} [{car.codice_versione}] {car.modello} {car.descr_versione}
-                                    </div>
-                                
-                                        
-                                        <div className="flex col-span-2">
-                                        <div className="text-md font-semibold pb-1">
-                                            <div><span className="text-sm">Azienda:</span> <br /> {car.company || "-"}</div>
-                                        </div>
-
-                                        <div className="text-md font-semibold pb-2">
-                                            <div><span className="text-sm">Ubicazione:</span> <br /> {car.descr_ubicazione || "-"}</div>
-                                        </div>
-                                        </div>
-                                        
-
-                                        
-                                        <div className="flex col-span-5">
-                                                <div><strong>Codice Interno:</strong> {car.codice_interno || "N/D"}</div>
-                                                <div><strong>Eurotax:</strong> {car.cod_eurotax_gamma || "N/D"}</div>
-                                                <div><strong>Area Commerciale:</strong> {car.area_comm}</div>
-                                                <div><strong>Neopatentato:</strong> {car.neopatentato === "N" ? "No" : "Sì"}</div>
-                                                <div><strong>Prezzo Base:</strong> €{car.prezzo2.toLocaleString()}</div>
-                                                <div><strong>Canale Uscita:</strong> {car.canale_uscita_descr || "N/D"}</div>
-                                                <div><strong>Categoria Linea:</strong> {car.categoria_linea}</div>
-                                                <div><strong>CO2:</strong> {car.co2 || "N/D"}</div>
-                                                <div><strong>Data Arrivo:</strong> {car.data_arrivo ? new Date(car.data_arrivo).toLocaleDateString() : "N/D"}</div>
-                                                <div><strong>Tipo Cambio:</strong> {car.tipo_cambio}</div>
-                                        </div>
-
-                                        
-                                        <div className="flex col-span-4">
-
-                                        </div>
-
-                                    <div className="mt-2">
-                                        <strong>NOTE:</strong><br />{car.note || "—"}
-                                    </div>*/}
                                 </div>
                             </div>
                             </TableCell>
@@ -296,7 +331,7 @@ export default function AutoTable() {
         </Table>
       </div>
       <div className="flex justify-center mt-4">
-        <Pagination>
+        <Pagination className="pb-4">
           <PaginationContent>
             <PaginationItem>
               <PaginationPrevious

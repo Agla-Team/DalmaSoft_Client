@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Separator } from "@/components/ui/separator"
 import {
   AudioWaveform,
   BookOpen,
@@ -22,7 +23,17 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
+  SidebarGroup,
+  SidebarGroupLabel,
 } from "@/components/ui/sidebar";
+
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuTrigger 
+} from "@/components/ui/dropdown-menu"
+
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router";
 import Dashboard from "@/pages/Dashboard";
@@ -81,9 +92,17 @@ export function AppSidebar(props) {
     },
     navMain: [
       { title: "Elenco Automobili", url: "#", icon: Bot, items: [
-          { title: "Dashboard", url: `${frontUrl}/autoPark`},
-          { title: "Nuove", url: `${frontUrl}/autoPark`}, 
-          { title: "Usate", url: `${frontUrl}/autoPark`}, 
+          { title: "Dashboard", url: `${frontUrl}/autoPark`, className: "text-sm text-gray-400"},
+
+          { title: "Auto Nuove", isTitle: true, className: "mt-2 mb-1 text-sm font-bold text-red-500 uppercase" },
+          { title: "Nuove In Stock Dalma", url: `${frontUrl}/infinity_interno`, className: "ml-2 text-sm text-gray-400"},
+          { title: "Nuove In Stock Esterni", url: `${frontUrl}/infinity_esterno`, className: "ml-2 text-sm text-gray-400"},
+                    
+          { title: "Auto Usate", isTitle: true, className: "mt-2 mb-1 text-sm font-bold text-red-500 uppercase" },
+          { title: "Usate In Stock Dalma", url: `${frontUrl}/autoPark`, className: "ml-2 text-sm text-gray-400" },
+          { title: "Usate In Stock Esterni", url: `${frontUrl}/autoPark`, className: "ml-2 text-sm text-gray-400"},
+          
+          { title: "Altri Stock", isTitle: true, className: "mt-2 text-xs font-bold text-gray-400 uppercase" },
           { title: "Assegnate", url: `${frontUrl}/autoPark`}, 
           { title: "Virtuali", url: `${frontUrl}/autoPark`}, 
         ], },
@@ -113,6 +132,7 @@ export function AppSidebar(props) {
     ],
   };
 
+  
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
