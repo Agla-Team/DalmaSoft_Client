@@ -5,28 +5,30 @@ const backUrl = import.meta.env.VITE_BACKEND_URL;
 
 export function UbiExt() {
     const [auto, setAuto] = useState({ autoConLogo: [] });
-    const [loading, setLoading] = useState(true);
     const [expandedRow, setExpandedRow] = useState(null);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [searchTerm, setSearchTerm] = useState("");
-    const rowsPerPage = 20;
-
+    
     const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
+
+    const [containerWidth, setContainerWidth] = useState("100vw");
 
     // Effetto per aggiornare isMobile quando cambia la dimensione dello schermo
     useEffect(() => {
 
-        console.log(backUrl)
+        const updateWidth = () => {
+            const sidebar = document.querySelector(".Sidebar"); // Modifica con la classe corretta della sidebar
+            const sidebarWidth = sidebar ? sidebar.offsetWidth : 0;
+            setContainerWidth(`calc(100vw - ${sidebarWidth}px)`);
 
-        const handleResize = () => {
-        setIsMobile(window.innerWidth < 640);
-        };
+            setIsMobile(window.innerWidth < 640);
+          };
 
+          updateWidth();
+                
         // Aggiunge un listener al resize della finestra
-        window.addEventListener("resize", handleResize);
+        window.addEventListener("resize", updateWidth);
 
         // Rimuove il listener quando il componente si smonta
-        return () => window.removeEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", updateWidth);
     }, []);
   
     useEffect(() => {
@@ -57,7 +59,7 @@ export function UbiExt() {
         : [];
 
     return (    
-        <div className={isMobile ? "reel" : "auto-grid"}>
+        <div className={isMobile ? "reel containerWidth" : "auto-grid containerWidth"}>
 
             <div className="row-span-3">
             <Card className="border border-red-700 rounded-md flex flex-col justify-between w-full h-full">
