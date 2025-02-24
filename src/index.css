@@ -25,5 +25,60 @@
   }
 }
 
+.UbiExt-container {
+  width: 100vw; /* Occupa tutto lo spazio disponibile nel contenitore */
+  max-width: 100vw; /* Evita restrizioni di larghezza */
+  overflow-x: auto; /* Permette lo scrolling orizzontale */
+  white-space: nowrap; /* Mantiene le celle in una riga */
+}
+
+.auto-grid {
+  --min-column-size: 18rem;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(var(--min-column-size), 100%), 1fr));
+}
+
+.reel {
+  --gap: 1rem;
+  display: grid;
+  gap: var(--gap);
+  grid-auto-flow: column;
+  grid-auto-columns: calc(100% - (var(--gap) / 2));
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scroll-padding: var(--gap);
+  width: 100vw;  
+}
+
+.reel {
+  scroll-snap-align: start;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.reel::-webkit-scrollbar {
+  display: none;
+}
+
+.reel {
+  touch-action: auto; /* Assicura che il tocco funzioni per lo scroll */
+  user-select: none; /* Evita la selezione accidentale del testo */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.flexible-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.flexible-grid > * {
+  flex: 1 1 min(100%, 578px); /* Occupa il 100% dello schermo sotto i 578px */
+}
+
 
 

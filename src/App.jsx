@@ -31,7 +31,7 @@ function App() {
         <Route path="/infinity_interno" element={<AutoNewInfinityInterne />} />
         <Route path="/infinity_esterno" element={<AutoNewInfinityEsterne />} />
       </Route>
-
+      
       {/* Redirect per tutte le route non esistenti */}
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
