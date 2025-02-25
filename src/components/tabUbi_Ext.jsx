@@ -59,8 +59,8 @@ export function TabUbiExt() {
     const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
 
     return (    
-    <div className="auto-grid">
-        <div className="col-span-12 pb-4 pt-4 w-[100%]">
+    <div className="auto-grid flex flex-col">
+        <div className="pb-4 pt-4 w-[100%] p-0">
             <Label htmlFor="search">Cerca</Label>
             <Input 
                 id="search"
@@ -72,7 +72,8 @@ export function TabUbiExt() {
             />
         </div>
 
-        <Card className="col-span-12 border border-slate-700 rounded-md p-0 w-[100%]">
+        <div className="pb-4 pt-4 w-[100%] p-0">
+        <Card className="border border-slate-700 rounded-md p-0 w-[100%]">
             <CardHeader className="p-2 bg-gradient-to-br from-slate-600 to-slate-500 rounded-t">
                 <CardTitle className="text-sm text-white font-light">
                 Lista Auto in Stock presenti in DALMA
@@ -84,19 +85,19 @@ export function TabUbiExt() {
                         <TableHeader className="bg-gray-200">
                             <TableRow>
                                 <TableHead></TableHead>
-                                <TableHead className="text-red-800">Marca</TableHead>
-                                <TableHead className="text-red-800">Modello</TableHead>
-                                <TableHead className="text-red-800">Versione</TableHead>
-                                <TableHead className="text-red-800">Colore</TableHead>
-                                <TableHead className="text-red-800">Linea</TableHead>
-                                <TableHead className="text-red-800">Targa</TableHead>
-                                <TableHead className="text-red-800">Telaio</TableHead>
-                                <TableHead className="text-red-800">KM</TableHead>
-                                <TableHead className="text-red-800">Data Imm.</TableHead>
-                                <TableHead className="text-red-800">Alimentazione</TableHead>
-                                <TableHead className="text-red-800">Azienda</TableHead>
-                                <TableHead className="text-red-800">Ubicazione</TableHead>
-                                <TableHead className="text-red-800">Status</TableHead>
+                                <TableHead className="text-red-800 uppercase">Marca</TableHead>
+                                <TableHead className="text-red-800 uppercase">Modello</TableHead>
+                                <TableHead className="text-red-800 uppercase">Versione</TableHead>
+                                <TableHead className="text-red-800 uppercase">Colore</TableHead>
+                                <TableHead className="text-red-800 uppercase">Linea</TableHead>
+                                <TableHead className="text-red-800 uppercase">Targa</TableHead>
+                                <TableHead className="text-red-800 uppercase">Telaio</TableHead>
+                                <TableHead className="text-red-800 uppercase">KM</TableHead>
+                                <TableHead className="text-red-800 uppercase">Data Imm.</TableHead>
+                                <TableHead className="text-red-800 uppercase">Alimentazione</TableHead>
+                                <TableHead className="text-red-800 uppercase">Azienda</TableHead>
+                                <TableHead className="text-red-800 uppercase">Ubicazione</TableHead>
+                                <TableHead className="text-red-800 uppercase">Status</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -314,6 +315,7 @@ export function TabUbiExt() {
                 </div>
             </CardContent>
         </Card>
+        </div>
     </div>
     )
 }

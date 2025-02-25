@@ -76,8 +76,9 @@ export function UbiExt() {
                 </CardContent>
             </Card>
             </div>
-
+            
             {conteggioPerSedeOrdinato.map((sede,i) => 
+                
                 (
                     <div key={i}>
                     <Card className="border border-yellow-600 rounded-md flex flex-col justify-between h-full w-full">
@@ -93,6 +94,7 @@ export function UbiExt() {
                 )
             )}
             
+
         </div>
     )
 }

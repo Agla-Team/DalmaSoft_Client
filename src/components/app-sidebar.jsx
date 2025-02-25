@@ -91,7 +91,7 @@ export function AppSidebar(props) {
       email: user.email,
     },
     navMain: [
-      { title: "Elenco Automobili", url: "#", icon: Bot, items: [
+      { title: "Elenco Automobili", className: "text-sm text-gray-400", url: "#", icon: Bot, items: [
           { title: "Dashboard", url: `${frontUrl}/autoPark`, className: "text-sm text-gray-400"},
 
           { title: "Auto Nuove", isTitle: true, className: "mt-2 mb-1 text-sm font-bold text-red-500 uppercase" },
