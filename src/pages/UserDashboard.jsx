@@ -5,10 +5,13 @@ import { Table, TableHead, TableRow, TableHeader, TableBody, TableCell } from "@
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { io } from "socket.io-client";
 import moment from "moment";
+import { TicketChart } from "@/components/chart_ticket";
 
 const Dashboard = () => {
   const [tickets, setTickets] = useState([]);
-  const [currentTime, setCurrentTime] = useState(moment().format("YYYY-MM-DD HH:mm:ss"));
+  const [onlineDesk, setOnline] = useState([]);
+  const [currentTime, setCurrentTime] = useState(moment().format("HH:mm:ss"));
+  const [currentDate, setCurrentDate] = useState(moment().format("DD-MM-YYYY"));
   const [lastCalledTicket, setLastCalledTicket] = useState(null);
 
   const socket = useMemo(() => {
@@ -49,6 +52,7 @@ const Dashboard = () => {
   // ===> Gestione realtime dell'aggioranamento dello stato di un determinato ticket
   useEffect(() => {
     const handleEditTicket = (editedTicket) => {
+      
       setTickets(prev=>{
         return prev.map(ticket => {
           if (ticket?.id === editedTicket?.id) {
@@ -59,7 +63,7 @@ const Dashboard = () => {
         })
       });
       
-      if (editedTicket.status === 'in_progress') {
+      if (editedTicket.status === 'waiting') {
         setLastCalledTicket(editedTicket);
       }
     }
@@ -74,7 +78,7 @@ const Dashboard = () => {
   // ===> Recupera tutti i ticket del giorno
   useEffect(() => {
     const fetchTickets = async () => {
-      const response = await fetch("https://screen.dalmaweb.it/api/tickets?api_key=c0019162439910429df65e809aca9c2a");
+      const response = await fetch("https://screen.dalmaweb.it/api/tickets?api_key=c0019162439910429df65e809aca9c2a");      
       const data = await response.json();
       setTickets(data);
     };
@@ -82,14 +86,36 @@ const Dashboard = () => {
     fetchTickets();
   }, []);
 
+  /*RECUPERA I DESK*/
+  useEffect(() => {
+    const fetchDesk = async () => {
+      try {
+        const response = await fetch("https://screen.dalmaweb.it/api/desks/all?api_key=c0019162439910429df65e809aca9c2a");
+        const dataOnline = await response.json();
+        setOnline(dataOnline);
+      } catch (error) {
+        console.error("Errore nel recupero dei desk online:", error);
+      }
+    };
+  
+    fetchDesk(); // Recupera i dati all'avvio
+  
+    const interval = setInterval(fetchDesk, 1000); // Aggiorna ogni 1 secondo
+  
+    return () => clearInterval(interval); // Pulizia quando il componente si smonta
+  }, []);
+
+  /*AGGIORNA ORARIO*/
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentTime(moment().format("YYYY-MM-DD HH:mm:ss"));
+      setCurrentTime(moment().format("HH:mm:ss"));
     }, 1000);
     return () => clearInterval(interval);
   }, []);
 
   
+
+
   const deskCount = tickets.filter(ticket => ticket.desk).reduce((acc, ticket) => {
     const desk = ticket.desk?.desk;
     acc[desk] = (acc[desk] || 0) + 1;
@@ -106,92 +132,129 @@ const Dashboard = () => {
     { S: 0, K: 0 }
   );
 
-  const inProgressTicket = tickets.find(ticket => ticket.status === "in_progress");
+  //const inProgressTicket = tickets.find(ticket => ticket.status === "in_progress");
 
   const latestTickets = [...tickets].sort((a, b) => new Date(b.created) - new Date(a.created)).slice(0, 10);
 
-  const hourlyData = Array.from({ length: 24 }, (_, i) => ({
-    hour: `${i}:00`,
-    count: tickets.filter(ticket => moment(ticket.created).hour() === i).length
-  }));
+  const hourlyData = Array.from({ length: 15 }, (_, i) => {
+    const hour = i + 6; // Inizia dalle 6 del mattino fino alle 20
+    return {
+      hour: `${hour}:00`,
+      count: tickets.filter(ticket => moment(ticket.created).hour() === hour).length
+    };
+  });
 
   const statusColors = {
-    done: "bg-green-700 text-white",
-    to_do: "bg-red-700 text-white",
-    in_progress: "bg-yellow-600 text-black",
-    skipped: "bg-gray-600 text-white",
+    done: "bg-green-100 text-green-800",
+    to_do: "bg-red-100 text-red-800",
+    in_progress: "bg-yellow-200 text-yellow-800",
+    skipped: "bg-gray-100 text-gray-800",
   };
+
+  const statoTicket = {
+    to_do: "Prenotato",
+    waiting: "Chiamato",
+    in_progress: "In lavorazione",
+    done: "Lavorato",
+    skipped: "Annullato",
+  };
+
+  const getStatoLabel = (status) => statoTicket[status] || "Stato sconosciuto";
 
   return (
     <>
     <div className="auto-grid">
-      <Card className="border border-red-700 rounded-md flex flex-col justify-between w-full h-full">
+      <Card className="shadow-lg border border-red-700 rounded-lg flex flex-col justify-between w-full h-full">
         <CardHeader className="p-2 bg-gradient-to-br from-red-800 to-red-700 rounded-t">
           <CardTitle className="text-[14px] text-white font-bold truncate text-center whitespace-nowrap overflow-hidden max-w-full">
             Data e Ora Corrente
           </CardTitle>
         </CardHeader>
-        <CardContent className="p-4 pt-1 flex flex-col justify-center items-center h-full">
-        <p className="text-2xl font-bold">{currentTime}</p>
+        <CardContent className="p-4 pt-1 flex flex-col justify-center rounded-lg items-center h-full bg-slate-200">
+          <p className="text-3xl font-bold">{currentDate}</p>
+          <p className="text-2xl font-bold">{currentTime}</p>
+          <span className="pt-2 uppercase text-gray-500">DESK OPERATIVI</span>
+            {/* Contenitore per i Badge */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 justify-center mt-2">
+              {Array.isArray(onlineDesk) && onlineDesk.length > 0 ? (
+                onlineDesk.map((desk) => (
+                  <Badge
+                    key={desk.id}
+                    className={`px-3 py-1 rounded-lg text-white ${
+                      desk.online ? "bg-green-500" : "bg-red-500"
+                    }`}
+                  >
+                    {desk.desk}
+                  </Badge>
+                ))
+              ) : (
+                <p className="text-gray-500">Nessun desk trovato</p>
+              )}
+            </div>
         </CardContent>
       </Card>
 
-      <Card className="border border-red-700 rounded-md flex flex-col justify-between w-full h-full">
+      <Card className="shadow-lg border border-red-700 rounded-lg flex flex-col justify-between w-full h-full">
         <CardHeader className="p-2 bg-gradient-to-br from-red-800 to-red-700 rounded-t">
           <CardTitle className="text-[14px] text-white font-bold truncate text-center whitespace-nowrap overflow-hidden max-w-full">
             Ticket Gestiti Oggi
           </CardTitle>
         </CardHeader>
-        <CardContent className="p-4 pt-1 flex flex-col justify-center items-center h-full">
+        <CardContent className="p-4 pt-1 flex flex-col justify-center rounded-lg items-center h-full bg-slate-200">
+          <span className="pt-2 uppercase text-gray-500">TICKET LAVORATI</span>
           <p className="text-3xl font-bold">{tickets.filter(ticket => ticket.status !== 'to_do')?.length}</p>
+
+          <span className="pt-2 uppercase text-gray-500">TICKET ANNULLATI</span>
+          <p className="text-3xl font-bold">{tickets.filter(ticket => ticket.status == 'skipped')?.length}</p>
         </CardContent>
       </Card>
       
-      <Card className="border border-red-700 rounded-md flex flex-col justify-between w-full h-full">
+      <Card className="shadow-lg border border-red-700 rounded-lg flex flex-col justify-between w-full h-full">
         <CardHeader className="p-2 bg-gradient-to-br from-red-800 to-red-700 rounded-t">
           <CardTitle className="text-[14px] text-white font-bold truncate text-center whitespace-nowrap overflow-hidden max-w-full">
             Top Desk
           </CardTitle>
         </CardHeader>
-        <CardContent className="auto-grid p-4 pt-1 flex flex-col items-center justify-center h-full">
+        <CardContent className="auto-grid p-4 pt-1 flex flex-col rounded-lg items-center justify-center h-full bg-slate-200">
           {sortedDesks.map(([desk, count]) => (
-            <div key={desk} className="flex flex-col items-center">
-                <div className="px-5 py-2 bg-yellow-600 text-neutral-200 rounded-md">
-                  <p className="text-2xl font-bold text-cyan-950"><span className="font-bold">{desk}</span></p>
-                  <p className="text-1xl font-bold text-slate-900"><span className="text-md">{count} ticket{count > 1 ? 's' : ''}</span></p>
-                </div>
-            </div>
+            <Badge className="bg-slate-700 text-white items-center justify-center w-full text-center p-3">
+              <div key={desk} className="flex flex-col items-center">
+                <p className="text-2xl font-bold"><span className="font-bold">{desk}</span></p>
+                <p className="text-1xl font-light uppercase"><span className="text-lg">{count} ticket{count > 1 ? 's' : ''}</span></p>
+              </div>
+            </Badge>
           ))}
         </CardContent>
       </Card>
-      <Card className="border border-red-700 rounded-md flex flex-col justify-between w-full h-full">
+
+      <Card className="shadow-lg border border-red-700 rounded-lg flex flex-col justify-between w-full h-full">
         <CardHeader className="p-2 bg-gradient-to-br from-red-800 to-red-700 rounded-t">
           <CardTitle className="text-[14px] text-white font-bold truncate text-center whitespace-nowrap overflow-hidden max-w-full">
             Ticket per Tipo
           </CardTitle>
         </CardHeader>
-        <CardContent className="p-4 pt-1 flex flex-col justify-center items-center h-full">
+        <CardContent className="p-4 pt-1 flex flex-col rounded-lg justify-center items-center h-full bg-slate-200">
           <div><p className="text-3xl font-bold"><strong>S:</strong> {ticketTypeCount.S}</p></div>
           <div><p className="text-3xl font-bold"><strong>K:</strong> {ticketTypeCount.K}</p></div>
         </CardContent>
       </Card>
       
-        <Card className="border border-yellow-600 rounded-md flex flex-col justify-between h-full w-full">
-          <CardHeader className="p-2 bg-gradient-to-br from-yellow-600 to-yellow-500 rounded-t">
-            <CardTitle className="text-[14px] text-white font-bold truncate text-center whitespace-nowrap overflow-hidden max-w-full">
-                Ticket Chiamato
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-4 pt-1 flex flex-col items-center justify-center h-full">
-          {inProgressTicket ? (
+      <Card className="shadow-lg border border-yellow-600 rounded-lg flex flex-col justify-between h-full w-full">
+        <CardHeader className="p-2 bg-gradient-to-br from-yellow-600 to-yellow-500 rounded-t">
+          <CardTitle className="text-[14px] text-white font-bold truncate text-center whitespace-nowrap overflow-hidden max-w-full">
+              Ultimo Ticket Chiamato
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-4 pt-1 flex flex-col rounded-lg items-center justify-center h-full bg-slate-200">
+          {lastCalledTicket ? (
             <>
-            <h3>Il numero</h3>
+            <span className="pt-2 uppercase text-gray-500">TICKET</span>
               <h2 className="text-[3em] font-bold">
-                <div>{lastCalledTicket.number}</div>
+                <div>{lastCalledTicket?.number}</div>
               </h2>
             <div className="px-5 py-2 bg-black text-neutral-200 rounded-md">
               <h3 className="font-bold text-[2em]">
-                <div>{lastCalledTicket.desk?.desk || "N/A"}</div>
+                <div>{lastCalledTicket?.desk?.desk || "N/A"}</div>
               </h3>
             </div>
             </>
@@ -199,12 +262,13 @@ const Dashboard = () => {
             <div>Nessun ticket in corso</div>
           )}
         </CardContent>
-        </Card>
+      </Card>
       
     </div>
 
-    <div className="auto-grid">
-      <Card className="col-span-2">
+    <div className="auto-grid gap-4 items-stretch">
+      
+      <Card className="col-span-5 shadow-lg border border-gray-200">
         <CardHeader>
           <CardTitle>Ultimi 10 Ticket</CardTitle>
         </CardHeader>
@@ -212,8 +276,8 @@ const Dashboard = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Numero</TableHead>
-                <TableHead>Box</TableHead>
+                <TableHead>Tikets</TableHead>
+                <TableHead>Desk</TableHead>
                 <TableHead>Stato</TableHead>
               </TableRow>
             </TableHeader>
@@ -222,12 +286,12 @@ const Dashboard = () => {
                 <TableRow key={ticket.id}>
                   <TableCell>{ticket.number}</TableCell>
                   <TableCell>
-                    <Badge className={ticket.desk?.desk ? "bg-green-700 text-white" : "bg-red-500 text-white"}>
+                    <Badge className={ticket.desk?.desk ? "bg-slate-200 text-slate-800" : "bg-red-100 text-red-800"}>
                       {ticket.desk?.desk || "In attesa di chiamata"}
                     </Badge></TableCell>
                   <TableCell>
-                  <Badge className={`${statusColors[ticket.status] || "bg-gray-500 text-white"}`}>
-                    {ticket.status}
+                  <Badge className={`${statusColors[ticket.status] || "bg-yellow-200 text-yellow-800"}`}>
+                      {getStatoLabel(ticket.status)}
                   </Badge>
                   </TableCell>
                 </TableRow>
@@ -236,21 +300,18 @@ const Dashboard = () => {
           </Table>
         </CardContent>
       </Card>
-      <Card className="col-span-2">
+
+      <Card className="col-span-7 shadow-lg bg-white p-4 rounded-lg flex flex-col h-full">
         <CardHeader>
           <CardTitle>Distribuzione Ticket per Ora</CardTitle>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={hourlyData}>
-              <XAxis dataKey="hour" />
-              <YAxis />
-              <Tooltip />
-              <Line type="monotone" dataKey="count" stroke="#8884d8" />
-            </LineChart>
-          </ResponsiveContainer>
+          
+            {/*GRAFICO TICKET*/}
+            <TicketChart data={hourlyData} className="h-full w-full flex-1" />
+          
         </CardContent>
-      </Card>
+      </Card>  
     </div>
     </>
   );

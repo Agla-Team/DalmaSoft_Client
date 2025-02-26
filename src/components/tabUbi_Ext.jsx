@@ -59,8 +59,8 @@ export function TabUbiExt() {
     const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
 
     return (    
-    <div className="auto-grid flex flex-col">
-        <div className="pb-4 pt-4 w-[100%] p-0">
+    <div className="flex flex-col w-full max-w-full gap-4">
+        <div className="pb-4 pt-4 w-full p-0">
             <Label htmlFor="search">Cerca</Label>
             <Input 
                 id="search"
@@ -72,7 +72,7 @@ export function TabUbiExt() {
             />
         </div>
 
-        <div className="pb-4 pt-4 w-[100%] p-0">
+        <div className="pb-4 pt-4 w-full p-0">
         <Card className="border border-slate-700 rounded-md p-0 w-[100%]">
             <CardHeader className="p-2 bg-gradient-to-br from-slate-600 to-slate-500 rounded-t">
                 <CardTitle className="text-sm text-white font-light">
