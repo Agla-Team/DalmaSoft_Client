@@ -27,11 +27,11 @@ import {
   SidebarGroupLabel,
 } from "@/components/ui/sidebar";
 
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuTrigger 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 
 import { useNavigate } from "react-router-dom";
@@ -61,12 +61,12 @@ export function AppSidebar(props) {
     const fetchUser = async () => {
       const token = localStorage.getItem("token");
       if (!token) return;
-  
+
       try {
         const response = await fetch(`${baseUrl}/api/auth/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-  
+
         if (response.ok) {
           const data = await response.json();
           console.log(data)
@@ -80,7 +80,7 @@ export function AppSidebar(props) {
         console.error("Errore nel recupero utente:", error);
       }
     };
-  
+
     fetchUser();
   }, []);
 
@@ -91,39 +91,47 @@ export function AppSidebar(props) {
       email: user.email,
     },
     navMain: [
-      { title: "Elenco Automobili", className: "text-sm text-gray-400", url: "#", icon: Bot, items: [
-          { title: "Dashboard", url: `${frontUrl}/autoPark`, className: "text-sm text-gray-400"},
+      {
+        title: "Elenco Automobili", className: "text-sm text-gray-400", url: "#", icon: Bot, items: [
+          { title: "Dashboard", url: `${frontUrl}/autoPark`, className: "text-sm text-gray-400" },
 
           { title: "Auto Nuove", isTitle: true, className: "mt-2 mb-1 text-sm font-bold text-red-500 uppercase" },
-          { title: "Nuove In Stock Dalma", url: `${frontUrl}/infinity_interno`, className: "ml-2 text-sm text-gray-400"},
-          { title: "Nuove In Stock Esterni", url: `${frontUrl}/infinity_esterno`, className: "ml-2 text-sm text-gray-400"},
-                    
+          { title: "Nuove In Stock Dalma", url: `${frontUrl}/infinity_interno`, className: "ml-2 text-sm text-gray-400" },
+          { title: "Nuove In Stock Esterni", url: `${frontUrl}/infinity_esterno`, className: "ml-2 text-sm text-gray-400" },
+
           { title: "Auto Usate", isTitle: true, className: "mt-2 mb-1 text-sm font-bold text-red-500 uppercase" },
           { title: "Usate In Stock Dalma", url: `${frontUrl}/autoPark`, className: "ml-2 text-sm text-gray-400" },
-          { title: "Usate In Stock Esterni", url: `${frontUrl}/autoPark`, className: "ml-2 text-sm text-gray-400"},
-          
+          { title: "Usate In Stock Esterni", url: `${frontUrl}/autoPark`, className: "ml-2 text-sm text-gray-400" },
+
           { title: "Altri Stock", isTitle: true, className: "mt-2 text-xs font-bold text-gray-400 uppercase" },
-          { title: "Assegnate", url: `${frontUrl}/autoPark`}, 
-          { title: "Virtuali", url: `${frontUrl}/autoPark`}, 
-        ], },
-      { title: "Inventario", url: "#", icon: Bot, items: [
-        { title: "Nuove", url: `${frontUrl}/invent_nuove`}, 
-        { title: "Usate", url: `${frontUrl}/invent_usate`}, 
-        { title: "Assegnate", url: `${frontUrl}/invent_ass`},
-        { title: "Inventariate", url: `${frontUrl}/inventariate`},  
-      ] },
-      { title: "Documentation", url: "#", icon: BookOpen, items: [
-        { title: "Introduction", url: "#" },
-        { title: "Get Started", url: "#" },
-        { title: "Tutorials", url: "#" },
-        { title: "Changelog", url: "#" },
-      ] },
-      { title: "Settings", url: "#", icon: Settings2, items: [
-        { title: "General", url: "#" },
-        { title: "Team", url: "#" },
-        { title: "Billing", url: "#" },
-        { title: "Limits", url: "#" },
-      ] },
+          { title: "Assegnate", url: `${frontUrl}/autoPark` },
+          { title: "Virtuali", url: `${frontUrl}/autoPark` },
+        ],
+      },
+      {
+        title: "Inventario", url: "#", icon: Bot, items: [
+          { title: "Nuove", url: `${frontUrl}/invent_nuove` },
+          { title: "Usate", url: `${frontUrl}/invent_usate` },
+          { title: "Assegnate", url: `${frontUrl}/invent_ass` },
+          { title: "Inventariate", url: `${frontUrl}/inventariate` },
+        ]
+      },
+      {
+        title: "Documentation", url: "#", icon: BookOpen, items: [
+          { title: "Introduction", url: "#" },
+          { title: "Get Started", url: "#" },
+          { title: "Tutorials", url: "#" },
+          { title: "Changelog", url: "#" },
+        ]
+      },
+      {
+        title: "Settings", url: "#", icon: Settings2, items: [
+          { title: "General", url: "#" },
+          { title: "Team", url: "#" },
+          { title: "Billing", url: "#" },
+          { title: "Limits", url: "#" },
+        ]
+      },
     ],
     projects: [
       { name: "Design Engineering", url: "#", icon: Frame },
@@ -132,14 +140,14 @@ export function AppSidebar(props) {
     ],
   };
 
-  
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <img 
-          src="./logo/dalma_black.png" 
-          alt="Dalma Logo" 
-          style={{ width: "150px", height: "auto", margin: "0 auto", display: "block" }} 
+        <img
+          src="./logo/dalma_black.png"
+          alt="Dalma Logo"
+          style={{ width: "150px", height: "auto", margin: "0 auto", display: "block" }}
         />
       </SidebarHeader>
       <SidebarContent>

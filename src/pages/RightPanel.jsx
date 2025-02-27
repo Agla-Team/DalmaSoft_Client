@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 
@@ -9,7 +9,7 @@ export default function RightPanel({ refreshTrigger }) {
   // Stati per i conteggi e i brand
   const [counts, setCounts] = useState({ inStock: 0, inventariate: 0 });
   const [brands, setBrands] = useState([]);
-  
+
   // Stati per le auto non inventariate
   const [validRecords, setValidRecords] = useState([]);       // auto con telaio valido
   const [incompleteRecords, setIncompleteRecords] = useState([]); // auto con telaio null o vuoto
@@ -52,7 +52,7 @@ export default function RightPanel({ refreshTrigger }) {
 
   return (
     <div className="space-y-6">
-      
+
       {/* Prima tabella: Auto Nuove non inventariate (validRecords) con paginazione */}
       <Card className="shadow-md">
         <CardHeader className="p-2 bg-gradient-to-br from-slate-600 to-slate-500 rounded-t">

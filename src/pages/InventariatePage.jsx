@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { QRCodeSVG } from "qrcode.react";
@@ -41,11 +41,11 @@ export default function InventariatePage() {
             {/* Visualizza il telaio centrato */}
             {/* Sezione con targa e bottone "Stampa QRCODE" */}
             <div className="flex flex-col items-center space-y-1">
-                <span className="text-base font-medium">{auto.telaio}</span>
-                <span className="text-base font-medium">{auto.targa ? auto.targa : '-'}</span>
-                <Button variant="outline" size="sm">
-                    Stampa QRCODE
-                </Button>
+              <span className="text-base font-medium">{auto.telaio}</span>
+              <span className="text-base font-medium">{auto.targa ? auto.targa : '-'}</span>
+              <Button variant="outline" size="sm">
+                Stampa QRCODE
+              </Button>
             </div>
           </CardContent>
           <CardFooter className="flex justify-between">
