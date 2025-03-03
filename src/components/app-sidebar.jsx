@@ -13,8 +13,8 @@ import {
   //SquareTerminal,
 } from "lucide-react";
 import { NavDash } from "@/components/nav-dashboard";
-import { NavMain } from "@/components/nav-main";
-import { NavProjects } from "@/components/nav-projects";
+import { NavInfinity } from "@/components/nav-autoinfinity";
+import { NavDalma } from "@/components/nav-autodalma";
 import { NavUser } from "@/components/nav-user";
 import { TeamSwitcher } from "@/components/team-switcher";
 import {
@@ -90,45 +90,37 @@ export function AppSidebar(props) {
       role: user.role,
       email: user.email,
     },
-    navMain: [
-      { title: "Elenco Automobili", className: "text-sm text-gray-400", url: "#", icon: Bot, items: [
+    NavInfinity: [
+      { title: "Elenco Automobili", className: "ml-2 text-sm text-gray-600", url: "#", icon: Bot, items: [
           { title: "Dashboard", url: `${frontUrl}/autoPark`, className: "text-sm text-gray-400"},
 
           { title: "Auto Nuove", isTitle: true, className: "mt-2 mb-1 text-sm font-bold text-red-500 uppercase" },
           { title: "Nuove In Stock Dalma", url: `${frontUrl}/infinity_interno`, className: "ml-2 text-sm text-gray-400"},
           { title: "Nuove In Stock Esterni", url: `${frontUrl}/infinity_esterno`, className: "ml-2 text-sm text-gray-400"},
-                    
+                     
           { title: "Auto Usate", isTitle: true, className: "mt-2 mb-1 text-sm font-bold text-red-500 uppercase" },
-          { title: "Usate In Stock Dalma", url: `${frontUrl}/autoPark`, className: "ml-2 text-sm text-gray-400" },
-          { title: "Usate In Stock Esterni", url: `${frontUrl}/autoPark`, className: "ml-2 text-sm text-gray-400"},
+          { title: "Usate In Stock Dalma", url: `${frontUrl}/infinity_interno_usate`, className: "ml-2 text-sm text-gray-400" },
+          { title: "Usate In Stock Esterni", url: `${frontUrl}/infinity_esterno_usate`, className: "ml-2 text-sm text-gray-400"},
           
           { title: "Altri Stock", isTitle: true, className: "mt-2 text-xs font-bold text-gray-400 uppercase" },
-          { title: "Assegnate", url: `${frontUrl}/autoPark`}, 
-          { title: "Virtuali", url: `${frontUrl}/autoPark`}, 
+          { title: "Assegnate", url: `#`}, 
+          { title: "Virtuali", url: `#`}, 
         ], },
-      { title: "Inventario", url: "#", icon: Bot, items: [
-        { title: "Nuove", url: `${frontUrl}/invent_nuove`}, 
-        { title: "Usate", url: `${frontUrl}/invent_usate`}, 
-        { title: "Assegnate", url: `${frontUrl}/invent_ass`},
-        { title: "Inventariate", url: `${frontUrl}/inventariate`},  
-      ] },
-      { title: "Documentation", url: "#", icon: BookOpen, items: [
-        { title: "Introduction", url: "#" },
-        { title: "Get Started", url: "#" },
-        { title: "Tutorials", url: "#" },
-        { title: "Changelog", url: "#" },
-      ] },
-      { title: "Settings", url: "#", icon: Settings2, items: [
-        { title: "General", url: "#" },
-        { title: "Team", url: "#" },
-        { title: "Billing", url: "#" },
-        { title: "Limits", url: "#" },
-      ] },
     ],
-    projects: [
-      { name: "Design Engineering", url: "#", icon: Frame },
-      { name: "Sales & Marketing", url: "#", icon: PieChart },
-      { name: "Travel", url: "#", icon: Map },
+    NavDalma: [
+      { title: "Elenco Automobili", url: "#", className: "ml-2 text-sm text-gray-600", icon: Bot, items: [
+        { title: "Dashboard", url: `#`, className: "text-sm text-gray-400"},
+
+        { title: "Gestione Auto", isTitle: true, className: "mt-2 mb-1 text-sm font-bold text-red-500 uppercase" },
+        { title: "Inventario Auto", url: `${frontUrl}/invent_nuove`},
+        { title: "Inserimento Manuale", url: `#`},
+        { title: "Sposta Auto", url: `#`},
+        
+        { title: "Elenchi", isTitle: true, className: "mt-2 mb-1 text-sm font-bold text-red-500 uppercase" },
+        { title: "Auto Nuove", url: `#`}, 
+        { title: "Auto Usate", url: `#`},
+        { title: "Veicoli Commerciali", url: `#`},  
+      ] },
     ],
   };
 
@@ -144,8 +136,8 @@ export function AppSidebar(props) {
       </SidebarHeader>
       <SidebarContent>
         <NavDash />
-        <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        <NavInfinity items={data.NavInfinity} />
+        <NavDalma items={data.NavDalma} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />

@@ -39,19 +39,27 @@ import {
   export function NavDash({ dashboard }) {
     const { isMobile } = useSidebar();
     return (
-        <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-          <SidebarGroupLabel className="text-red-800">Generale</SidebarGroupLabel>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <a href={`${frontUrl}/user-dashboard`}>
-                  <PieChart />
-                  <span>Dashboard</span>
-                </a>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarGroup>
+      <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+      <SidebarGroupLabel className="text-red-800 uppercase font-bold text-xs px-3 py-2">Generale</SidebarGroupLabel>
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <SidebarMenuButton asChild>
+            <a href={`${frontUrl}/user-dashboard`}>
+              <PieChart />
+              <span className="ml-2 text-sm text-gray-600">Dashboard</span>
+            </a>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+        <SidebarMenuItem>
+          <SidebarMenuButton asChild>
+            <a href={`${frontUrl}/planning`}>
+              <Map /> {/* Icona modificabile a piacere */}
+              <span className="ml-2 text-sm text-gray-600">Planning</span>
+            </a>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      </SidebarMenu>
+    </SidebarGroup>
       );
     }
   

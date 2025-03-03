@@ -20,7 +20,7 @@ export function TabUbiExt() {
     const rowsPerPage = 20;
   
     useEffect(() => {
-    fetch(`${backUrl}/api/auto/stock_esterno`)
+    fetch(`${backUrl}/api/auto/stock_esterno_usate`)
     .then((response) => response.json())
       .then((data) => {
         setAuto(data);
@@ -238,22 +238,6 @@ export function TabUbiExt() {
                                                                     <div className="text-start">Prezzo Veicolo</div>
                                                                     <div className="text-end">€{car.salePrice.toLocaleString()}</div>
                                                                     <div className="text-end">€{car.salePricePlusVat.toLocaleString()}</div>
-
-                                                                    <div className="text-start">Prezzo Optionals</div>
-                                                                    <div className="text-end">€{car.optionalsPrice.toLocaleString() || '0,00'}</div>
-                                                                    <div className="text-end">€{(car.optionalsPrice * 1.22).toLocaleString() || '0,00'}</div>
-
-                                                                    <div className="text-start">Prezzo Aziendale</div>
-                                                                    <div className="text-end">€{car.normalPrice.toLocaleString()}</div>
-                                                                    <div className="text-end">€{(car.normalPrice * 1.22).toLocaleString()}</div>
-
-                                                                    <div className="text-start">Accessori</div>
-                                                                    <div className="text-end">€0,00</div>
-                                                                    <div className="text-end">€0,00</div>
-
-                                                                    <div className="text-start">Spese</div>
-                                                                    <div className="text-end">€0,00</div>
-                                                                    <div className="text-end">€0,00</div>
 
                                                                     <div className="font-semibold text-start">Totale</div>
                                                                     <div className="font-semibold text-end">€{car.price.toLocaleString()}</div>

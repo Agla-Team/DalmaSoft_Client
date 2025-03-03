@@ -15,10 +15,10 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 
-export function NavMain({ items }) {
+export function NavDalma({ items }) {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel className="text-red-800 uppercase font-bold text-xs px-3 py-2">Parco Auto</SidebarGroupLabel>
+      <SidebarGroupLabel className="text-red-800 uppercase font-bold text-xs px-3 py-2">Parco Auto Dalma</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
           <Collapsible
@@ -27,9 +27,9 @@ export function NavMain({ items }) {
             defaultOpen={item.isActive}
             className="group/collapsible"
           >
-            <SidebarMenuItem>
+            <SidebarMenuItem className={item.className || ""}>
               <CollapsibleTrigger asChild>
-                <SidebarMenuButton tooltip={item.title}>
+                <SidebarMenuButton tooltip={item.title} className={item.className || ""}>
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>
                   <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
