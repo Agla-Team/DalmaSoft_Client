@@ -12,13 +12,20 @@ import AutoUsateInfinityInterne from "./pages/usateStockIntInfinity"
 import AutoNewInfinityEsterne from "./pages/nuoveStockExtInfinity"
 import AutoUsateInfinityEsterne from "./pages/usateStockExtInfinity"
 
+import InvUseDalma from "./pages/invUseDalma"
+
 import Inventory_New from "./pages/Inventory_New";
 import InventariatePage from "./pages/InventariatePage";
 import Planning from "./pages/planning";
+import TestDashboard from "./pages/test";
+
+
 import ProtectedRoute from "./assets/ProtectedRoute"; // Import corretto
+import { VehiclesContextProvider } from "./hooks/useVehicles";
 
 function App() {
   return (
+    
     <Routes>
       {/* Rotte pubbliche */}
       <Route path="/" element={<Login />} />
@@ -31,7 +38,8 @@ function App() {
         <Route path="/user-dashboard" element={<UserDashboard />} />
         <Route path="/user-management" element={<UserControl />} />
         <Route path="/autoPark" element={<AutoGest />} />
-        <Route path="/invent_nuove" element={<Inventory_New />} />
+        
+        <Route path="/invent_nuove" element={<VehiclesContextProvider><Inventory_New /></VehiclesContextProvider>} />
         <Route path="/inventariate" element={<InventariatePage />} />
         {/*ROTTE LISTE AUTO */}
         <Route path="/planning" element={<Planning />} />
@@ -40,6 +48,8 @@ function App() {
         <Route path="/infinity_esterno" element={<AutoNewInfinityEsterne />} />
         <Route path="/infinity_interno_usate" element={<AutoUsateInfinityInterne />} />
         <Route path="/infinity_esterno_usate" element={<AutoUsateInfinityEsterne />} />
+        <Route path="/dalma_usate" element={<InvUseDalma />} />
+        <Route path="/test" element={<TestDashboard />} />
       </Route>
       
       {/* Redirect per tutte le route non esistenti */}

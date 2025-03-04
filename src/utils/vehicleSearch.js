@@ -3,24 +3,27 @@ const backUrl = import.meta.env.VITE_BACKEND_URL;
 
 /**
  * Cerca un veicolo per numero di telaio
- * @param {string} telaioParziale - Numero di telaio (anche parziale)
+ * @param {string} telaio - Numero di telaio (anche parziale)
  * @returns {Promise<Array>} - Array di veicoli trovati
  */
-export const searchTelaioAutoNew = async (telaioParziale) => {
-  if (!telaioParziale || telaioParziale.length < 5) {
+export const searchTelaioAuto = async (telaio) => {
+  if (!telaio || telaio.trim().length < 5) {
     return [];
   }
 
   try {
-    const res = await fetch(`${backUrl}/api/inventario/searchNewTelaio?query=${encodeURIComponent(telaioParziale)}`);
+    const res = await fetch(
+      `${backUrl}/api/inventario/search/telaio?query=${encodeURIComponent(telaio)}`
+    );
     if (!res.ok) {
       throw new Error(`Errore API: ${res.status}`);
     }
     const data = await res.json();
     console.log("Risultati ricerca per telaio:", data);
     return data;
+    
   } catch (error) {
-    console.error("Errore nella ricerca veicolo per telaio:", error);
+    console.error("Errore nella ricerca per telaio:", error);
     return [];
   }
 };
@@ -30,16 +33,17 @@ export const searchTelaioAutoNew = async (telaioParziale) => {
  * @param {string} targa - Numero di targa (con o senza spazi)
  * @returns {Promise<Array>} - Array di veicoli trovati
  */
-export const searchTargaAutoNew = async (targa) => {
+export const searchTargaAuto = async (targa) => {
   if (!targa || targa.trim().length < 3) {
     return [];
   }
 
   try {
-    // Rimuovi spazi per la ricerca
-    const searchTarga = targa.replace(/\s+/g, '');
-    
-    const res = await fetch(`${backUrl}/api/inventario/searchNewTarga?query=${encodeURIComponent(searchTarga)}`);
+    // Rimuove eventuali spazi
+    const searchTarga = targa.replace(/\s+/g, "");
+    const res = await fetch(
+      `${backUrl}/api/inventario/search/targa?targa=${encodeURIComponent(searchTarga)}`
+    );
     if (!res.ok) {
       throw new Error(`Errore API: ${res.status}`);
     }
@@ -47,46 +51,61 @@ export const searchTargaAutoNew = async (targa) => {
     console.log("Risultati ricerca per targa:", data);
     return data;
   } catch (error) {
-    console.error("Errore nella ricerca veicolo per targa:", error);
+    console.error("Errore nella ricerca per targa:", error);
     return [];
   }
 };
 
 /**
  * Ricerca generica veicolo (targa o telaio)
+ * Se il tipo è "auto", la funzione combina i risultati ottenuti dalla ricerca per telaio e per targa.
  * @param {string} query - Query di ricerca (telaio o targa)
- * @param {string} type - Tipo di ricerca ('telaio', 'targa', o 'auto')
+ * @param {string} type - Tipo di ricerca ('telaio', 'targa' o 'auto')
  * @returns {Promise<Array>} - Array di veicoli trovati
  */
-export const searchVehicle = async (query, type = 'auto') => {
+export const searchVehicle = async (query, type = "auto") => {
   if (!query || query.trim().length < 3) {
     return [];
   }
 
   try {
-    let endpoint;
-    
-    // Determina l'endpoint corretto in base al tipo
-    switch (type.toLowerCase()) {
-      case 'telaio':
-        endpoint = 'searchNewTelaio';
-        break;
-      case 'targa':
-        endpoint = 'searchNewTarga';
-        // Rimuovi spazi per la ricerca targa
-        query = query.replace(/\s+/g, '');
-        break;
-      default:
-        // Tipo 'auto' cerca in entrambi
-        endpoint = 'search';
+    // Se si specifica "auto", combino i risultati sia della ricerca per telaio che per targa
+    if (type.toLowerCase() === "auto") {
+      const [resultsTelaio, resultsTarga] = await Promise.all([
+        fetch(
+          `${backUrl}/api/inventario/search/telaio?query=${encodeURIComponent(query)}`
+        ),
+        fetch(
+          `${backUrl}/api/inventario/search/targa?query=${encodeURIComponent(
+            query.replace(/\s+/g, "")
+          )}`
+        ),
+      ]);
+      if (!resultsTelaio.ok || !resultsTarga.ok) {
+        throw new Error(`Errore API durante la ricerca auto`);
+      }
+      const [dataTelaio, dataTarga] = await Promise.all([
+        resultsTelaio.json(),
+        resultsTarga.json(),
+      ]);
+      // Unisco i risultati
+      return [...dataTelaio, ...dataTarga];
+    } else {
+      // Altrimenti, uso il tipo specificato
+      let endpoint = type.toLowerCase();
+      // Se è targa, rimuovo eventuali spazi
+      if (endpoint === "targa") {
+        query = query.replace(/\s+/g, "");
+      }
+      const res = await fetch(
+        `${backUrl}/api/inventario/search/${endpoint}?query=${encodeURIComponent(query)}`
+      );
+      if (!res.ok) {
+        throw new Error(`Errore API: ${res.status}`);
+      }
+      const data = await res.json();
+      return data;
     }
-    
-    const res = await fetch(`${backUrl}/api/inventario/${endpoint}?query=${encodeURIComponent(query)}`);
-    if (!res.ok) {
-      throw new Error(`Errore API: ${res.status}`);
-    }
-    const data = await res.json();
-    return data;
   } catch (error) {
     console.error(`Errore nella ricerca veicolo (${type}):`, error);
     return [];
@@ -94,7 +113,7 @@ export const searchVehicle = async (query, type = 'auto') => {
 };
 
 export default {
-  searchTelaioAutoNew,
-  searchTargaAutoNew,
-  searchVehicle
+  searchTelaioAuto,
+  searchTargaAuto,
+  searchVehicle,
 };

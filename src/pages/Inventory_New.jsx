@@ -1,10 +1,11 @@
-import React, { useEffect, useState} from "react";
+import React, { useContext, useEffect, useState} from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import LicensePlateReader from "../components/read-plate";
-import { searchTelaioAutoNew } from "../utils/vehicleSearch"; // Importa la funzione di utilità
+import { searchTelaioAuto } from "../utils/vehicleSearch"; // Importa la funzione di utilità
+import { VehiclesContext } from "@/hooks/useVehicles";
 
 import {
     AlertDialog,
@@ -14,6 +15,7 @@ import {
     AlertDialogDescription,
     AlertDialogAction,
   } from "@/components/ui/alert-dialog";
+
 
 // Variabile per l'URL backend (o backUrl se l'hai definito altrove)
 const backUrl = import.meta.env.VITE_BACKEND_URL;
@@ -29,6 +31,9 @@ export default function LeftPanel({ onConfirm, onTelaioChange, refreshTrigger })
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState([]);
+
+  const { getVehicleFromEntity, vehicleByEntity, getAllVehicleFromEntity, allVehicleByEntity } = useContext(VehiclesContext);
+ 
 
   const [validRecords, setValidRecords] = useState([]);
   const [incompleteRecords, setIncompleteRecords] = useState([]);
@@ -100,13 +105,13 @@ export default function LeftPanel({ onConfirm, onTelaioChange, refreshTrigger })
       "Showroom 3° Piano",
       "Accettazione Service",
     ],
-    "Via Donizzetti 3": [
+    "Dalma Via Donizzetti 3": [
       "Showroom Dr Vetrine",
       "Showroom Evo 2° Piano",
       "Esposizione Vetture Usate Piano Terra",
       "Esposizione Vetture Usate 2° Piano",
     ],
-    "Via Donizzetti 6": [
+    "Dalma Via Donizzetti 6": [
       "Showroom Evo",
       "Esposizione Veicoli Commerciali Peugeot",
       "Esposizione Veicoli Commerciali Citroën",
@@ -132,36 +137,11 @@ export default function LeftPanel({ onConfirm, onTelaioChange, refreshTrigger })
   };
 
   // Funzione di ricerca: viene chiamata quando l'utente digita nel campo telaio
-  const handleTelaioSearch = async (value) => {
-    setQuery(value);
-    setTelaio(value);
-    
-    if (value.length > 4) {
-      setLoading(true);
-      try {
-        // Utilizziamo la funzione di utilità per cercare per telaio
-        const data = await searchTelaioAutoNew(value);
-        setResults(data);
-      } catch (error) {
-        console.error("Errore nella ricerca auto per telaio:", error);
-        setResults([]);
-      } finally {
-        setLoading(false);
-      }
-    } else {
-      setResults([]);
-    }
-  };
+  
 
   // Gestione della selezione del veicolo dalla lista dei risultati
-  const handleSelectCar = (car) => {
-    setSelectedCar(car);
-    // Imposta il campo telaio in base al veicolo selezionato
-    setTelaio(car.telaio);
-    // Puoi anche invocare onTelaioChange se necessario
-    if (onTelaioChange) onTelaioChange(car.telaio);
-    // Opzionalmente, svuota i risultati
-    setResults([]);
+  const handleSelectCar = (telaio) => {
+    getAllVehicleFromEntity(telaio)
   };
 
   // Funzione per confermare l'auto: invia i dati al backend
@@ -232,16 +212,22 @@ export default function LeftPanel({ onConfirm, onTelaioChange, refreshTrigger })
                 type="text"
                 placeholder="Inserisci il numero di telaio..."
                 value={telaio}
-                onChange={(e) => handleTelaioSearch(e.target.value)}
+                onChange={(e) => {
+                  setTelaio(e.target.value);
+                  handleSelectCar(e.target.value);
+                }}
                 className="w-full border-gray-300 focus:border-red-500 focus:ring-red-500"
               />
               {loading && <p className="text-sm text-gray-500 mt-2">Ricerca in corso...</p>}
-              {results.length > 0 && (
+              {allVehicleByEntity.length > 0 && (
                 <div className="mt-4 border rounded p-2 max-h-64 overflow-y-auto">
-                  {results.map((car) => (
+                  {allVehicleByEntity.map((car) => (
                     <div
                       key={car.telaio}
-                      onClick={() => handleSelectCar(car)}
+                      onClick={() => {
+                        setTelaio('')
+                        getVehicleFromEntity('telaio', car.telaio)
+                      }}
                       className="cursor-pointer bg-yellow-500 hover:bg-gray-100 p-2 rounded mb-2"
                     >
                       <div className="table w-full">
@@ -292,17 +278,17 @@ export default function LeftPanel({ onConfirm, onTelaioChange, refreshTrigger })
           </CardTitle>
         </CardHeader>
         <CardContent className="pt-2">
-          {selectedCar ? (
+          {vehicleByEntity ? (
             <div className="space-y-2 text-gray-700">
-              <div><strong>Marca:</strong> {selectedCar.marca}</div>
-              <div><strong>Modello:</strong> {selectedCar.modello}</div>
-              <div><strong>Colore:</strong> {selectedCar.descr_colore}</div>
-              <div><strong>Ubicazione:</strong> {selectedCar.descr_ubicazione}</div>
-              <div><strong>Telaio:</strong> {selectedCar.telaio}</div>
-              <div><strong>Targa:</strong> {selectedCar.targa}</div>
-              <div><strong>Alimentazione:</strong> {selectedCar.alimentazione}</div>
-              <div><strong>Tipo Cambio:</strong> {selectedCar.tipo_cambio}</div>
-              <div><strong>Status:</strong> {selectedCar.status_veicolo_desc}</div>
+              <div><strong>Marca:</strong> {vehicleByEntity.marca}</div>
+              <div><strong>Modello:</strong> {vehicleByEntity.modello}</div>
+              <div><strong>Colore:</strong> {vehicleByEntity.descr_colore}</div>
+              <div><strong>Ubicazione:</strong> {vehicleByEntity.descr_ubicazione}</div>
+              <div><strong>Telaio:</strong> {vehicleByEntity.telaio}</div>
+              <div><strong>Targa:</strong> {vehicleByEntity.targa}</div>
+              <div><strong>Alimentazione:</strong> {vehicleByEntity.alimentazione}</div>
+              <div><strong>Tipo Cambio:</strong> {vehicleByEntity.tipo_cambio}</div>
+              <div><strong>Status:</strong> {vehicleByEntity.status_veicolo_desc}</div>
             </div>
           ) : (
             <p className="text-gray-500">Nessun veicolo selezionato.</p>
