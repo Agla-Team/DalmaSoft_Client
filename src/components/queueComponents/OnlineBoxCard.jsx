@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
-import { MonitorDot, ScreenShareOff } from "lucide-react";
+import { MonitorDot, Power, ScreenShareOff } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
-export default function OnlineBoxCard({ desks }) {
+export default function OnlineBoxCard({ desks, turnOffDesk }) {
+
     return (
         <Card className="shadow-none overflow-hidden flex flex-col justify-between w-full h-full">
             <CardHeader className="p-3">
@@ -16,11 +17,10 @@ export default function OnlineBoxCard({ desks }) {
                         desks.map((desk) => (
                             <div
                                 key={desk?.id}
-                                className={`w-full py-2 px-4 flex justify-between border items-center rounded-md text-gray-700 ${
-                                    desk.online
-                                        ? "bg-green-200 border-green-600"
-                                        : "bg-gray-200 border-gray-400"
-                                }`}
+                                className={`w-full py-2 px-4 flex justify-between border items-center rounded-md text-gray-700 ${desk.online
+                                    ? "bg-green-200 border-green-600"
+                                    : "bg-gray-200 border-gray-400"
+                                    }`}
                             >
                                 <div className="flex items-center space-x-2">
                                     {desk.online ? (
@@ -33,17 +33,17 @@ export default function OnlineBoxCard({ desks }) {
                                         {desk?.desk}
                                     </span>
                                 </div>
-                                <div className="space-x-3">
-                                    <span className="text-sm">
-                                        {desk.online ? "online" : "offline"}
-                                    </span>
+                                <div className="space-x-3 flex items-center">
+
                                     <div
-                                        className={`w-2 h-2 rounded-full inline-block ${
-                                            desk.online
-                                                ? "bg-green-500"
-                                                : "bg-red-500"
-                                        }`}
+                                        className={`w-2 h-2 rounded-full inline-block ${desk.online
+                                            ? "bg-green-500"
+                                            : "bg-red-500"
+                                            }`}
                                     ></div>
+                                    <button className="cursor-pointer" onClick={() => turnOffDesk(desk.id)}>
+                                        <Power height={18} />
+                                    </button>
                                 </div>
                             </div>
                         ))

@@ -15,16 +15,15 @@ export default function HourlyTicketsTrend({ tickets }) {
     });
 
     return (
-        <Card className="col-span-7 shadow-none bg-white flex flex-col h-full">
+        <Card className="shadow-none bg-white flex flex-col h-full">
             <CardHeader className="p-3">
                 <CardTitle className="text-red-700">
                     Distribuzione Oraria
                 </CardTitle>
             </CardHeader>
-            <CardContent className="p-4">
+            <CardContent className="py-4">
                 <TicketChart
                     data={hourlyData}
-                    className="h-full w-full flex-1"
                 />
             </CardContent>
         </Card>

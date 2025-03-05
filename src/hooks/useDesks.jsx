@@ -1,9 +1,24 @@
-import { baseUrlTicket, getRequest } from "@/lib/service";
-import { useEffect, useState } from "react";
+import { baseUrlTicket, getRequest, postRequest } from "@/lib/service";
+import { useCallback, useEffect, useState } from "react";
 
 export const useDesks = (socket) => {
     const [desks, setDesks] = useState([]);
     const [desksLoading, setDesksLoading] = useState(false);
+
+    //* ===> Funzione per cambiare lo stato di un desk
+    const turnOffDesk = useCallback(async (deskId) => {
+        try {
+            const response = await postRequest(`${baseUrlTicket}/desks/remote?api_key=${import.meta.env.VITE_API_KEY_TICKET
+                }`, JSON.stringify(deskId));
+
+            if (response.error) {
+                console.log(response.message.error);
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }, [])
 
     //* ===> Gestione realtime del cambiamento di stato dei desk
     useEffect(() => {
@@ -31,8 +46,7 @@ export const useDesks = (socket) => {
             try {
                 setDesksLoading(true);
                 const response = await getRequest(
-                    `${baseUrlTicket}/desks/all?api_key=${
-                        import.meta.env.VITE_API_KEY_TICKET
+                    `${baseUrlTicket}/desks/all?api_key=${import.meta.env.VITE_API_KEY_TICKET
                     }`
                 );
                 setDesksLoading(false);
@@ -48,5 +62,6 @@ export const useDesks = (socket) => {
     return {
         desks,
         desksLoading,
+        turnOffDesk,
     };
 };

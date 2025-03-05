@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { ChevronRight } from "lucide-react";
 import {
   Collapsible,
@@ -14,6 +15,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
+import { Link } from "react-router";
 
 export function NavInfinity({ items }) {
   return (
@@ -40,18 +42,18 @@ export function NavInfinity({ items }) {
                   {item.items?.map((subItem) => (
                     subItem.isTitle ? (  // ⬅️ Controllo se è un titolo di sezione
                       <div key={subItem.title} className="text-red-800 uppercase font-bold text-xs px-3 py-2">
-                      {subItem.title}
-                    </div>
-                  ) : (
-                    <SidebarMenuSubItem key={subItem.title}>
-                      <SidebarMenuSubButton asChild>
-                        <a href={subItem.url} className={subItem.className || ""}>
-                          <span>{subItem.title}</span>
-                        </a>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  )
-                ))}
+                        {subItem.title}
+                      </div>
+                    ) : (
+                      <SidebarMenuSubItem key={subItem.title}>
+                        <SidebarMenuSubButton asChild>
+                          <Link to={subItem.url} className={subItem.className || ""}>
+                            <span>{subItem.title}</span>
+                          </Link>
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+                    )
+                  ))}
                 </SidebarMenuSub>
               </CollapsibleContent>
             </SidebarMenuItem>

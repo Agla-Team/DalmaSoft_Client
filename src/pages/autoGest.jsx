@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { baseUrl, getRequest } from "@/lib/service";
 import VehiclesDetailsCard from "@/components/VehiclesDetailsCard";
+import VehiclesXBrandSummary from "@/components/VehiclesXBrandSummary";
 
 export default function AutoGest() {
     const [data, setData] = useState({
@@ -90,137 +90,17 @@ export default function AutoGest() {
                 />
             </div>
 
-            {/* Schede per ogni brand */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {data?.dettagliPerBrand &&
-                Object.keys(data.dettagliPerBrand).length > 0 ? (
+                    Object.keys(data.dettagliPerBrand).length > 0 ? (
                     Object.entries(data.dettagliPerBrand).map(
                         ([brand, details]) => (
-                            <Card key={brand} className="shadow-none border">
-                                <CardHeader className="flex items-center">
-                                    <img
-                                        src={
-                                            details.logo_url ||
-                                            "./logo/default.png"
-                                        }
-                                        alt={brand}
-                                        className="w-20 h-20 object-contain mr-auto"
-                                    />
-                                    <CardTitle></CardTitle>
-                                </CardHeader>
-                                <CardContent>
-                                    {details.autoNuove && (
-                                        <div className="grid grid-cols-2 gap-4 border-t border-gray-300 pt-4">
-                                            <div className="space-y-2">
-                                                <p className="text-gray-700 text-md">
-                                                    <strong>
-                                                        Nuove In Stock:
-                                                    </strong>{" "}
-                                                    {details.autoNuove[
-                                                        "In Stock"
-                                                    ]?.count || 0}{" "}
-                                                    unità
-                                                </p>
-                                                <p className="text-gray-700 text-md">
-                                                    <strong>Assegnato:</strong>{" "}
-                                                    {details.autoNuove[
-                                                        "Assegnato"
-                                                    ]?.count || 0}{" "}
-                                                    unità
-                                                </p>
-                                                <p className="text-gray-700 text-md">
-                                                    <strong>Virtuali:</strong>{" "}
-                                                    {details.autoNuove[
-                                                        "Virtuale"
-                                                    ]?.count || 0}{" "}
-                                                    unità
-                                                </p>
-                                            </div>
-                                            <div className="space-y-2 border-l border-gray-300 pl-4">
-                                                <p className="text-gray-700 text-md">
-                                                    <strong>
-                                                        Valore Nuove:
-                                                    </strong>{" "}
-                                                    €{" "}
-                                                    {details.autoNuove[
-                                                        "In Stock"
-                                                    ]?.valore?.toLocaleString() ||
-                                                        "0"}
-                                                </p>
-                                                <p className="text-gray-700 text-md">
-                                                    <strong>
-                                                        Valore Assegnato:
-                                                    </strong>{" "}
-                                                    €{" "}
-                                                    {details.autoNuove[
-                                                        "Assegnato"
-                                                    ]?.valore?.toLocaleString() ||
-                                                        "0"}
-                                                </p>
-                                                <p className="text-gray-700 text-md">
-                                                    <strong>
-                                                        Valore Virtuali:
-                                                    </strong>{" "}
-                                                    €{" "}
-                                                    {details.autoNuove[
-                                                        "Virtuale"
-                                                    ]?.valore?.toLocaleString() ||
-                                                        "0"}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    )}
-                                    {details.autoUsate && (
-                                        <div className="grid grid-cols-2 gap-4 border-t border-gray-300 pt-4">
-                                            <div className="space-y-2">
-                                                <p className="text-gray-700 text-md">
-                                                    <strong>
-                                                        Usate In Stock:
-                                                    </strong>{" "}
-                                                    {details.autoUsate[
-                                                        "In Stock"
-                                                    ]?.count || 0}{" "}
-                                                    unità
-                                                </p>
-                                                <p className="text-gray-700 text-md">
-                                                    <strong>Assegnato:</strong>{" "}
-                                                    {details.autoUsate[
-                                                        "Assegnato"
-                                                    ]?.count || 0}{" "}
-                                                    unità
-                                                </p>
-                                            </div>
-                                            <div className="space-y-2 border-l border-gray-300 pl-4">
-                                                <p className="text-gray-700 text-md">
-                                                    <strong>
-                                                        Valore Usate:
-                                                    </strong>{" "}
-                                                    €{" "}
-                                                    {details.autoUsate[
-                                                        "In Stock"
-                                                    ]?.valore?.toLocaleString() ||
-                                                        "0"}
-                                                </p>
-                                                <p className="text-gray-700 text-md">
-                                                    <strong>
-                                                        Valore Assegnato:
-                                                    </strong>{" "}
-                                                    €{" "}
-                                                    {details.autoUsate[
-                                                        "Assegnato"
-                                                    ]?.valore?.toLocaleString() ||
-                                                        "0"}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    )}
-                                </CardContent>
-                            </Card>
+                            <VehiclesXBrandSummary brand={brand} details={details} key={brand} />
                         )
                     )
                 ) : (
-                    <p className="text-gray-500">
-                        ⚠️ Nessun dato disponibile...
+                    <p className="text-gray-300">
+                        Loading...
                     </p>
                 )}
             </div>

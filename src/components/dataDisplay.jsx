@@ -1,5 +1,4 @@
 // src/components/DataDisplay.jsx
-import React from 'react';
 import { usePolling } from '../hooks/usePolling'; // Regola il percorso in base alla tua struttura
 const backUrl = import.meta.env.VITE_BACKEND_URL;
 
