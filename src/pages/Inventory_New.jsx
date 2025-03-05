@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState} from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -32,7 +32,17 @@ export default function LeftPanel({ onConfirm, onTelaioChange, refreshTrigger })
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState([]);
 
-  const { getVehicleFromEntity, vehicleByEntity, getAllVehicleFromEntity, allVehicleByEntity } = useContext(VehiclesContext);
+  const debounceTimerRef = useRef(null);
+  const [localResults, setLocalResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+
+  const { 
+    getVehicleFromEntity, 
+    vehicleByEntity, 
+    getAllVehicleFromEntity, 
+    allVehicleByEntity,
+    vehicleByEntityLoading 
+  } = useContext(VehiclesContext);
  
   console.log('da front: ', allVehicleByEntity)
 
@@ -149,13 +159,19 @@ export default function LeftPanel({ onConfirm, onTelaioChange, refreshTrigger })
 
   // Funzione per confermare l'auto: invia i dati al backend
   const handleConfirm = async () => {
-    if (!selectedCar) {
+    if (!vehicleByEntity) {
       alert("Seleziona un veicolo dalla lista dei risultati.");
       return;
     }
+
+    if (!condizione || !tipologia || !selectedBuilding || !selectedLocation) {
+      alert("Non hai inserito tutti i campi richiesti!");
+      return;
+    }
+
     try {
       const payload = {
-        ...selectedCar,
+        ...vehicleByEntity,
         note,
         condizione, // Il valore scelto dalla select (default "Nuovo")
         tipologia,
@@ -221,7 +237,7 @@ export default function LeftPanel({ onConfirm, onTelaioChange, refreshTrigger })
                 <div className="mt-4 border rounded p-2 max-h-64 overflow-y-auto">
                   {allVehicleByEntity.map((car) => (
                     <div
-                      key={car.telaio}
+                      key={car.id}
                       onClick={() => {
                         setTelaio('')
                         getVehicleFromEntity('telaio', car.telaio)
