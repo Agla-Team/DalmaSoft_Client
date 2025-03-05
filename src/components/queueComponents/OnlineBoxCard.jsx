@@ -42,7 +42,11 @@ export default function OnlineBoxCard({ desks, turnOffDesk }) {
                                             }`}
                                     ></div>
                                     <button className="cursor-pointer" onClick={() => turnOffDesk(desk.id)}>
-                                        <Power height={18} />
+                                        {
+                                            desk?.online && (
+                                                <Power height={18} />
+                                            )
+                                        }
                                     </button>
                                 </div>
                             </div>

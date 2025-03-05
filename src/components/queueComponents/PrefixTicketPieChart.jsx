@@ -2,7 +2,7 @@
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 
 export default function PrefixTicketPieChart({ data }) {
-    const COLORS = ["#3182CE", "#63B3ED"];
+    const COLORS = ["#ed5e5e", "#e81e1e"];
 
     return (
         <ResponsiveContainer height={300}>
