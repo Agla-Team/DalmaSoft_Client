@@ -16,14 +16,14 @@ import HourlyTicketsTrend from "@/components/queueComponents/HourlyTicketsTrend"
 const Dashboard = () => {
     const { socket } = useContext(SocketContext);
     const { tickets, ticketsLoading, lastCalledTicket } = useTickets(socket);
-    const { desks, desksLoading } = useDesks(socket);
+    const { desks, desksLoading, turnOffDesk } = useDesks(socket);
 
     return (
         <>
             <div className="auto-grid">
                 <DailyTickets tickets={tickets} isLoading={ticketsLoading} />
 
-                <OnlineBoxCard desks={desks} isLoading={desksLoading} />
+                <OnlineBoxCard desks={desks} isLoading={desksLoading} turnOffDesk={turnOffDesk} />
 
                 <DeskRanking tickets={tickets} isLoading={ticketsLoading} />
 
@@ -32,10 +32,10 @@ const Dashboard = () => {
                 <LastTicketCalled lastCalledTicket={lastCalledTicket} />
             </div>
 
-            <div className="auto-grid gap-4 items-stretch">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
                 <Last10TicketsStatus tickets={tickets} />
-
                 <HourlyTicketsTrend tickets={tickets} />
+
             </div>
         </>
     );

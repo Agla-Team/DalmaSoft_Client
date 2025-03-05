@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import {
-    Area,
-    AreaChart,
+    BarChart,
+    Bar,
     CartesianGrid,
     XAxis,
     YAxis,
@@ -11,10 +11,10 @@ import {
 
 export function TicketChart({ data }) {
     return (
-        <ResponsiveContainer width="100%" height={300}>
-            <AreaChart
+        <ResponsiveContainer height={400}>
+            <BarChart
                 data={data}
-                margin={{ left: 12, right: 12, top: 10, bottom: 10 }}
+                margin={{ right: 12, top: 10, bottom: 10 }}
             >
                 <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
                 <XAxis
@@ -25,26 +25,19 @@ export function TicketChart({ data }) {
                     tick={{ fill: "#4A5568", fontSize: 12 }}
                 />
                 <YAxis
-                    tick={{ fill: "#4A5568", fontSize: 12 }}
+                    tick={{ fill: "#b91c1c", fontSize: 12 }}
                     allowDecimals={false}
                 />
                 <Tooltip
                     contentStyle={{
                         backgroundColor: "white",
-                        borderRadius: "8px",
+                        borderRadius: "4px",
+                        border: "1px solid #E2E8F0",
                         padding: "8px",
-                        borderColor: "#CBD5E0",
                     }}
-                    labelStyle={{ fontWeight: "bold", color: "#2D3748" }}
                 />
-                <Area
-                    type="monotone"
-                    dataKey="count"
-                    stroke="#c9004c"
-                    fill="#d15c5c"
-                    fillOpacity={0.4}
-                />
-            </AreaChart>
+                <Bar dataKey="count" stroke="#ed5e5e" fill="rgba(237, 94, 94, 0.5)" barSize={30} />
+            </BarChart>
         </ResponsiveContainer>
     );
 }

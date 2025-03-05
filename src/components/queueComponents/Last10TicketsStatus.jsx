@@ -35,7 +35,7 @@ export default function Last10TicketsStatus({ tickets }) {
         statoTicket[status] || "Stato sconosciuto";
 
     return (
-        <Card className="col-span-5 shadow-none">
+        <Card className="shadow-none">
             <CardHeader className="p-3">
                 <CardTitle className="text-red-700">Ultimi 10 Ticket</CardTitle>
             </CardHeader>
@@ -51,35 +51,34 @@ export default function Last10TicketsStatus({ tickets }) {
                     <TableBody>
                         {tickets.length > 0
                             ? last10tickets.map((ticket) => (
-                                  <TableRow key={ticket.id}>
-                                      <TableCell>{ticket.number}</TableCell>
-                                      <TableCell>
-                                          <Badge
-                                              className={
-                                                  ticket.desk?.desk
-                                                      ? "bg-slate-200 text-slate-800 shadow-none"
-                                                      : "bg-red-100 text-red-800 shadow-none"
-                                              }
-                                          >
-                                              {ticket.desk?.desk ||
-                                                  "In attesa di chiamata"}
-                                          </Badge>
-                                      </TableCell>
-                                      <TableCell>
-                                          <Badge
-                                              className={` shadow-none ${
-                                                  statusColors[ticket.status] ||
-                                                  "bg-yellow-200 text-yellow-800"
-                                              }`}
-                                          >
-                                              {getStatoLabel(ticket.status)}
-                                          </Badge>
-                                      </TableCell>
-                                  </TableRow>
-                              ))
+                                <TableRow key={ticket.id}>
+                                    <TableCell>{ticket.number}</TableCell>
+                                    <TableCell>
+                                        <Badge
+                                            className={
+                                                ticket.desk?.desk
+                                                    ? "bg-slate-200 text-slate-800 shadow-none"
+                                                    : "bg-red-100 text-red-800 shadow-none"
+                                            }
+                                        >
+                                            {ticket.desk?.desk ||
+                                                "In attesa di chiamata"}
+                                        </Badge>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Badge
+                                            className={` shadow-none ${statusColors[ticket.status] ||
+                                                "bg-yellow-200 text-yellow-800"
+                                                }`}
+                                        >
+                                            {getStatoLabel(ticket.status)}
+                                        </Badge>
+                                    </TableCell>
+                                </TableRow>
+                            ))
                             : Array.from({ length: 10 }).map((_, idx) => (
-                                  <TableRow key={idx} className="h-12" />
-                              ))}
+                                <TableRow key={idx} className="h-12" />
+                            ))}
                     </TableBody>
                 </Table>
             </CardContent>

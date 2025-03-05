@@ -8,6 +8,8 @@ import AutoGest from "./pages/autoGest";
 import AutoNewInfinityInterne from "./pages/nuoveStockIntInfinity";
 import AutoNewInfinityEsterne from "./pages/nuoveStockExtInfinity";
 import InvUseDalma from "./pages/invUseDalma"
+import AutoUsateInfinityEsterne from "./pages/usateStockExtInfinity"
+import AutoUsateInfinityInterne from "./pages/usateStockIntInfinity"
 
 import Inventory_New from "./pages/Inventory_New";
 import InventariatePage from "./pages/InventariatePage";
@@ -41,6 +43,7 @@ function App() {
                     <Route path="/planning" element={<Planning />} />
                     <Route path="/infinity_interno" element={<AutoNewInfinityInterne />} />
                     <Route path="/infinity_esterno" element={<AutoNewInfinityEsterne />} />
+
 
                     <Route path="/infinity_interno_usate" element={<AutoUsateInfinityInterne />} />
                     <Route path="/infinity_esterno_usate" element={<AutoUsateInfinityEsterne />} />

@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import PrefixTicketPieChart from "./PrefixTicketPieChart";
 
 export default function PrefixTickets({ tickets, isLoading }) {
     const { S, K } = useMemo(() => {
@@ -13,6 +14,11 @@ export default function PrefixTickets({ tickets, isLoading }) {
         );
     }, [tickets]);
 
+    const data = [
+        { name: "Officina", value: S },
+        { name: "Ingresso Principale", value: K }
+    ];
+
     return (
         <Card className="shadow-none min-h-[400px] border flex flex-col w-full">
             <CardHeader className="p-3">
@@ -24,16 +30,19 @@ export default function PrefixTickets({ tickets, isLoading }) {
                 {isLoading ? (
                     "loading..."
                 ) : (
-                    <>
-                        <div className="text-xl flex items-center justify-between">
+                    <div className="flex flex-col">
+                        <div className="text-md flex items-center justify-between">
                             <span>Ingresso officina: </span>
                             <span>{S}</span>
                         </div>
-                        <div className="text-xl flex items-center justify-between">
+                        <div className="text-md flex items-center justify-between">
                             <span>Ingresso principale: </span>
                             <span>{K}</span>
                         </div>
-                    </>
+                        <div className="grow">
+                            <PrefixTicketPieChart data={data} />
+                        </div>
+                    </div>
                 )}
             </CardContent>
         </Card>
