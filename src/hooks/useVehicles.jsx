@@ -32,6 +32,11 @@ export const VehiclesContextProvider = ({ children }) => {
     }
 
     const getAllVehicleFromEntity = async (entity) => {
+
+        if (!entity || entity.trim() === '') {
+          setAllVehicleByEntity([]);
+          return;
+        }
         
         try {
             
@@ -42,8 +47,8 @@ export const VehiclesContextProvider = ({ children }) => {
                 throw new Error(`Errore API: ${res.status}`);
               }
               const data = await res.json();
-              
-              setAllVehicleByEntity(data);
+              console.log(data)
+              setAllVehicleByEntity([...data]);
         } catch (error) {
             console.log(error);
         }

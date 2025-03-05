@@ -34,6 +34,7 @@ export default function LeftPanel({ onConfirm, onTelaioChange, refreshTrigger })
 
   const { getVehicleFromEntity, vehicleByEntity, getAllVehicleFromEntity, allVehicleByEntity } = useContext(VehiclesContext);
  
+  console.log('da front: ', allVehicleByEntity)
 
   const [validRecords, setValidRecords] = useState([]);
   const [incompleteRecords, setIncompleteRecords] = useState([]);
@@ -140,8 +141,10 @@ export default function LeftPanel({ onConfirm, onTelaioChange, refreshTrigger })
   
 
   // Gestione della selezione del veicolo dalla lista dei risultati
-  const handleSelectCar = (telaio) => {
-    getAllVehicleFromEntity(telaio)
+  const handleChange = (e) => {
+    const newentity = e.target.value;
+    setTelaio(newentity);
+    getAllVehicleFromEntity(newentity);
   };
 
   // Funzione per confermare l'auto: invia i dati al backend
@@ -212,14 +215,9 @@ export default function LeftPanel({ onConfirm, onTelaioChange, refreshTrigger })
                 type="text"
                 placeholder="Inserisci il numero di telaio..."
                 value={telaio}
-                onChange={(e) => {
-                  setTelaio(e.target.value);
-                  handleSelectCar(e.target.value);
-                }}
+                onChange={handleChange}
                 className="w-full border-gray-300 focus:border-red-500 focus:ring-red-500"
               />
-              {loading && <p className="text-sm text-gray-500 mt-2">Ricerca in corso...</p>}
-              {allVehicleByEntity.length > 0 && (
                 <div className="mt-4 border rounded p-2 max-h-64 overflow-y-auto">
                   {allVehicleByEntity.map((car) => (
                     <div
@@ -253,7 +251,7 @@ export default function LeftPanel({ onConfirm, onTelaioChange, refreshTrigger })
                     </div>
                   ))}
                 </div>
-              )}
+             
             </CardContent>
           </Card>
 
