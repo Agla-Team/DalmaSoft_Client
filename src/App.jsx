@@ -8,12 +8,14 @@ import AutoGest from "./pages/autoGest";
 import AutoNewInfinityInterne from "./pages/nuoveStockIntInfinity";
 import AutoNewInfinityEsterne from "./pages/nuoveStockExtInfinity";
 import InvUseDalma from "./pages/invUseDalma"
+import InvNewDalma from "./pages/invNewDalma"
 import AutoUsateInfinityEsterne from "./pages/usateStockExtInfinity"
 import AutoUsateInfinityInterne from "./pages/usateStockIntInfinity"
 
 import Inventory_New from "./pages/Inventory_New";
 import InventariatePage from "./pages/InventariatePage";
 import Planning from "./pages/planning";
+
 import TestDashboard from "./pages/test";
 
 
@@ -25,7 +27,7 @@ function App() {
     return (
         <SocketContextProvider>
             
-    <Routes>
+            <Routes>
                 {/* Rotte pubbliche */}
                 <Route path="/login" element={<Login />} />
                 <Route path="/initialize" element={<InizializeAdmin />} />
@@ -37,7 +39,7 @@ function App() {
                     <Route path="/user-management" element={<UserControl />} />
                     <Route path="/autoPark" element={<AutoGest />} />
                     
-        <Route path="/invent_nuove" element={<VehiclesContextProvider><Inventory_New /></VehiclesContextProvider>} />
+                    <Route path="/invent_nuove" element={<VehiclesContextProvider><Inventory_New /></VehiclesContextProvider>} />
                     <Route path="/inventariate" element={<InventariatePage />} />
                     {/*ROTTE LISTE AUTO */}
                     <Route path="/planning" element={<Planning />} />
@@ -48,9 +50,11 @@ function App() {
                     <Route path="/infinity_interno_usate" element={<AutoUsateInfinityInterne />} />
                     <Route path="/infinity_esterno_usate" element={<AutoUsateInfinityEsterne />} />
 
-                  <Route path="/dalma_usate" element={<InvUseDalma />} />
-        <Route path="/test" element={<TestDashboard />} />
-      </Route>
+                    <Route path="/dalma_usate" element={<InvUseDalma />}/>
+                    <Route path="/dalma_nuove" element={<InvNewDalma />} />
+
+                    <Route path="/test" element={<TestDashboard />} />
+                </Route>
 
                 {/* Redirect per tutte le route non esistenti */}
                 <Route path="*" element={<Navigate to="/login" replace />} />

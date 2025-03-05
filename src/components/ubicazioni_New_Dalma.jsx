@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 const backUrl = import.meta.env.VITE_BACKEND_URL;
 
 
-export default function UbiDalmaUsato() {
+export default function UbiDalmaNuovo() {
     const [auto, setAuto] = useState({ autoConLogo: [] });
     const [expandedRow, setExpandedRow] = useState(null);
     
@@ -32,7 +32,7 @@ export default function UbiDalmaUsato() {
     }, []);
   
     useEffect(() => {
-    fetch(`${backUrl}/api/auto/stock_ubi_dalma_usate`)
+    fetch(`${backUrl}/api/auto/stock_ubi_dalma_nuove`)
     .then((response) => response.json())
       .then((data) => {
         console.log(data)

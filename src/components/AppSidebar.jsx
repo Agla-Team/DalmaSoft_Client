@@ -45,8 +45,8 @@ export function AppSidebar(props) {
                     { title: "Sposta Auto", url: `#` },
 
                     { title: "Elenchi", isTitle: true, className: "mt-2 mb-1 text-sm font-bold text-red-500 uppercase" },
-                    { title: "Auto Nuove", url: `#` },
-                    { title: "Auto Usate", url: `#` },
+                    { title: "Auto Nuove", url: `/dalma_nuove` },
+                    { title: "Auto Usate", url: `/dalma_usate` },
                     { title: "Veicoli Commerciali", url: `#` },
                 ]
             },

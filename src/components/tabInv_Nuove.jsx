@@ -23,7 +23,7 @@ import {
 
 const backUrl = import.meta.env.VITE_BACKEND_URL;
 
-export default function TabUbiUseDalma() {
+export default function TabUbiNewDalma() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -31,7 +31,7 @@ export default function TabUbiUseDalma() {
   const rowsPerPage = 10; // puoi regolare il numero di righe per pagina
 
   useEffect(() => {
-    fetch(`${backUrl}/api/inventario/inventariate_use`)
+    fetch(`${backUrl}/api/inventario/inventariate_new`)
       .then((response) => response.json())
       .then((data) => {
         // Se la risposta è un array, usalo direttamente
