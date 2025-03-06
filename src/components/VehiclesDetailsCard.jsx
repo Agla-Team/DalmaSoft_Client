@@ -12,7 +12,7 @@ export default function VehiclesDetailsCard({ title, count, value }) {
                     <p className="text-5xl font-semibold">{count}</p>
                     <span className="text-lg uppercase">veicoli</span>
                 </div>
-                <p className="text-lg">valore: €{value}</p>
+                <p className="text-lg">valore {value}</p>
             </CardContent>
         </Card>
     );

@@ -8,17 +8,20 @@ export const useDesks = (socket) => {
     //* ===> Funzione per cambiare lo stato di un desk
     const turnOffDesk = useCallback(async (deskId) => {
         try {
-            const response = await postRequest(`${baseUrlTicket}/desks/remote?api_key=${import.meta.env.VITE_API_KEY_TICKET
-                }`, JSON.stringify(deskId));
+            const response = await postRequest(
+                `${baseUrlTicket}/desks/remote?api_key=${
+                    import.meta.env.VITE_API_KEY_TICKET
+                }`,
+                JSON.stringify({ deskId })
+            );
 
             if (response.error) {
                 console.log(response.message.error);
             }
-
         } catch (error) {
             console.log(error);
         }
-    }, [])
+    }, []);
 
     //* ===> Gestione realtime del cambiamento di stato dei desk
     useEffect(() => {
@@ -46,7 +49,8 @@ export const useDesks = (socket) => {
             try {
                 setDesksLoading(true);
                 const response = await getRequest(
-                    `${baseUrlTicket}/desks/all?api_key=${import.meta.env.VITE_API_KEY_TICKET
+                    `${baseUrlTicket}/desks/all?api_key=${
+                        import.meta.env.VITE_API_KEY_TICKET
                     }`
                 );
                 setDesksLoading(false);
