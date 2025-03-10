@@ -8,19 +8,38 @@ export const VehiclesContext = createContext(null);
 
 export const VehiclesContextProvider = ({ children }) => {
     const [ownedVehicleDataSummary, setOwnedVehicleDataSummary] = useState([]);
+    const [ownedVehicleDataSummaryLoading, setOwnedVehicleDataSummaryLoading] = useState(false);
 
     const [vehicleByEntity, setVehicleByEntity] = useState(null);
     const [vehicleByEntityLoading, setVehicleByEntityLoading] = useState(false);
     const [allVehicleByEntity, setAllVehicleByEntity] = useState([]);
 
+    const [vehicleInDalma, setVehicleInDalma] = useState([]);
+    const [vehicleInDalmaLoading, setVehicleInDalmaLoading] = useState(false);
+
+    //* ==> Recupera i dati dei veicoli presenti in sede
+    const getAllVehicleInDalma = async () => {
+        try {
+            setVehicleInDalmaLoading(true)
+            const response = await getRequest(`${backUrl}/api/auto/stock_interno`);
+            setVehicleInDalmaLoading(false);
+            setVehicleInDalma(response);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    //* ===> Recupera il sommario dei dati ( conteggio e valore ) dei veicoli in stock
     const getOwnedVehicleDataSummary = async () => {
         try {
+            setOwnedVehicleDataSummaryLoading(true);
             const response = await getRequest(
                 `${backUrl}/api/auto/autogest`,
                 localStorage.getItem("token")
             );
-            console.log(response);
 
+            setOwnedVehicleDataSummaryLoading(false);
             setOwnedVehicleDataSummary(response);
         } catch (error) {
             console.log(error);
@@ -85,6 +104,7 @@ export const VehiclesContextProvider = ({ children }) => {
             value={{
                 getOwnedVehicleDataSummary,
                 ownedVehicleDataSummary,
+                ownedVehicleDataSummaryLoading,
 
                 vehicleByEntity,
                 vehicleByEntityLoading,
@@ -92,6 +112,10 @@ export const VehiclesContextProvider = ({ children }) => {
                 getAllVehicleFromEntity,
                 allVehicleByEntity,
                 addVehicleToInvetory,
+
+                getAllVehicleInDalma,
+                vehicleInDalma,
+                vehicleInDalmaLoading
             }}
         >
             {children}

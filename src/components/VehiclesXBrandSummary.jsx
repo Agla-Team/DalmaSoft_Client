@@ -1,11 +1,8 @@
 /* eslint-disable react/prop-types */
+import { euro } from "@/lib/utils";
 import { Card, CardContent, CardHeader } from "./ui/card";
 
-export default function VehiclesXBrandSummary({ brand, details }) {
-    let euro = Intl.NumberFormat("en-DE", {
-        style: "currency",
-        currency: "EUR",
-    });
+export default function VehiclesXBrandSummary({ option, brand, details }) {
 
     return (
         <Card className="shadow-none border">
@@ -28,7 +25,7 @@ export default function VehiclesXBrandSummary({ brand, details }) {
                 {details.autoNuove && (
                     <div className="grid grid-cols-2">
                         <div className="space-y-4">
-                            <div className="border-b pb-2">
+                            <div className="pb-2">
                                 <h4 className="font-semibold">
                                     Nuove In Stock
                                 </h4>
@@ -38,7 +35,7 @@ export default function VehiclesXBrandSummary({ brand, details }) {
                                 </span>
                             </div>
 
-                            <div className="border-b pb-2">
+                            {/* <div className="border-b pb-2">
                                 <h4 className="font-semibold">Assegnato</h4>
                                 <span className="text-gray-700 text-md">
                                     {details.autoNuove["Assegnato"]?.count || 0}{" "}
@@ -52,21 +49,21 @@ export default function VehiclesXBrandSummary({ brand, details }) {
                                     {details.autoNuove["Virtuale"]?.count || 0}{" "}
                                     unità
                                 </span>
-                            </div>
+                            </div> */}
                         </div>
 
                         <div className="space-y-4 text-end">
-                            <div className="border-b pb-2">
+                            <div className="pb-2">
                                 <h4 className="font-semibold">Valore Nuove</h4>
                                 <span className="text-gray-700 text-md">
                                     {euro.format(
                                         details.autoNuove.Generale?.valore ||
-                                            "0"
+                                        "0"
                                     )}
                                 </span>
                             </div>
 
-                            <div className="border-b pb-2">
+                            {/* <div className="border-b pb-2">
                                 <h4 className="font-semibold">
                                     Valore Assegnato
                                 </h4>
@@ -88,14 +85,14 @@ export default function VehiclesXBrandSummary({ brand, details }) {
                                         "Virtuale"
                                     ]?.valore?.toLocaleString() || "0"}
                                 </span>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 )}
                 {details.autoUsate && (
                     <div className="grid grid-cols-2">
                         <div className="space-y-4">
-                            <div className="border-b pb-2">
+                            <div className="pb-2">
                                 <h4 className="font-semibold">
                                     Usate In Stock
                                 </h4>
@@ -105,27 +102,27 @@ export default function VehiclesXBrandSummary({ brand, details }) {
                                 </span>
                             </div>
 
-                            <div className="border-b pb-2">
+                            {/* <div className="border-b pb-2">
                                 <h4 className="font-semibold">Assegnato</h4>
                                 <span className="text-gray-700 text-md">
                                     {details.autoUsate["Assegnato"]?.count || 0}{" "}
                                     unità
                                 </span>
-                            </div>
+                            </div> */}
                         </div>
 
                         <div className="space-y-4 text-end">
-                            <div className="border-b pb-2">
+                            <div className="pb-2">
                                 <h4 className="font-semibold">Valore Usate</h4>
                                 <span className="text-gray-700 text-md">
                                     {euro.format(
                                         details.autoUsate.Generale?.valore ||
-                                            "0"
+                                        "0"
                                     )}
                                 </span>
                             </div>
 
-                            <div className="border-b pb-2">
+                            {/* <div className="border-b pb-2">
                                 <h4 className="font-semibold">
                                     Valore Assegnato
                                 </h4>
@@ -135,7 +132,7 @@ export default function VehiclesXBrandSummary({ brand, details }) {
                                         "Assegnato"
                                     ]?.valore?.toLocaleString() || "0"}
                                 </span>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 )}

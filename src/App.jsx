@@ -60,7 +60,11 @@ function App() {
                     <Route path="/planning" element={<Planning />} />
                     <Route
                         path="/infinity_interno"
-                        element={<AutoNewInfinityInterne />}
+                        element={
+                            <VehiclesContextProvider>
+                                <AutoNewInfinityInterne />
+                            </VehiclesContextProvider>
+                        }
                     />
                     <Route
                         path="/infinity_esterno"
