@@ -38,11 +38,11 @@ export function AppSidebar(props) {
                         url: `/infinity_interno`,
                         className: "ml-2 text-sm text-gray-400",
                     },
-                    {
-                        title: "Nuove In Stock Esterni",
-                        url: `/infinity_esterno`,
-                        className: "ml-2 text-sm text-gray-400",
-                    },
+                    // {
+                    //     title: "Nuove In Stock Esterni",
+                    //     url: `/infinity_esterno`,
+                    //     className: "ml-2 text-sm text-gray-400",
+                    // },
 
                     {
                         title: "Auto Usate",
@@ -55,20 +55,20 @@ export function AppSidebar(props) {
                         url: `/infinity_interno_usate`,
                         className: "ml-2 text-sm text-gray-400",
                     },
-                    {
-                        title: "Usate In Stock Esterni",
-                        url: `/infinity_esterno_usate`,
-                        className: "ml-2 text-sm text-gray-400",
-                    },
+                    // {
+                    //     title: "Usate In Stock Esterni",
+                    //     url: `/infinity_esterno_usate`,
+                    //     className: "ml-2 text-sm text-gray-400",
+                    // },
 
-                    {
-                        title: "Altri Stock",
-                        isTitle: true,
-                        className:
-                            "mt-2 text-xs font-bold text-gray-400 uppercase",
-                    },
-                    { title: "Assegnate", url: `#` },
-                    { title: "Virtuali", url: `#` },
+                    // {
+                    //     title: "Altri Stock",
+                    //     isTitle: true,
+                    //     className:
+                    //         "mt-2 text-xs font-bold text-gray-400 uppercase",
+                    // },
+                    // { title: "Assegnate", url: `#` },
+                    // { title: "Virtuali", url: `#` },
                 ],
             },
         ],

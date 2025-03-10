@@ -1,9 +1,10 @@
 /* eslint-disable react/prop-types */
 import { euro } from "@/lib/utils";
 import { Card, CardContent, CardHeader } from "./ui/card";
+import { ArrowRight } from "lucide-react";
+import { Link } from "react-router";
 
-export default function VehiclesXBrandSummary({ option, brand, details }) {
-
+export default function VehiclesXBrandSummary({ option, brand, details, setSelectedFilters }) {
     return (
         <Card className="shadow-none border">
             <CardHeader className="">
@@ -13,11 +14,11 @@ export default function VehiclesXBrandSummary({ option, brand, details }) {
                     </h3>
 
                     <div className="w-20 h-20">
-                        <img
+                        {/* <img
                             src={details.logo_url || "./logo/default.png"}
                             alt={brand}
                             className="w-full h-full object-cover object-center"
-                        />
+                        /> */}
                     </div>
                 </div>
             </CardHeader>
@@ -27,65 +28,25 @@ export default function VehiclesXBrandSummary({ option, brand, details }) {
                         <div className="space-y-4">
                             <div className="pb-2">
                                 <h4 className="font-semibold">
-                                    Nuove In Stock
+                                    {option !== 'generale' ? option : 'Totale'}
                                 </h4>
                                 <span className="text-gray-700 text-md">
-                                    {details.autoNuove.Generale?.count || 0}{" "}
+                                    {details.autoNuove[option.toLowerCase().replace(' ', '_')]?.count || 0}{" "}
                                     unità
                                 </span>
                             </div>
-
-                            {/* <div className="border-b pb-2">
-                                <h4 className="font-semibold">Assegnato</h4>
-                                <span className="text-gray-700 text-md">
-                                    {details.autoNuove["Assegnato"]?.count || 0}{" "}
-                                    unità
-                                </span>
-                            </div>
-
-                            <div>
-                                <h4 className="font-semibold">Virtuali</h4>
-                                <span className="text-gray-700 text-md">
-                                    {details.autoNuove["Virtuale"]?.count || 0}{" "}
-                                    unità
-                                </span>
-                            </div> */}
                         </div>
 
                         <div className="space-y-4 text-end">
                             <div className="pb-2">
-                                <h4 className="font-semibold">Valore Nuove</h4>
+                                <h4 className="font-semibold">Valore</h4>
                                 <span className="text-gray-700 text-md">
                                     {euro.format(
-                                        details.autoNuove.Generale?.valore ||
+                                        details.autoNuove[option.toLowerCase().replace(' ', '_')]?.valore ||
                                         "0"
                                     )}
                                 </span>
                             </div>
-
-                            {/* <div className="border-b pb-2">
-                                <h4 className="font-semibold">
-                                    Valore Assegnato
-                                </h4>
-                                <span className="text-gray-700 text-md">
-                                    €{" "}
-                                    {details.autoNuove[
-                                        "Assegnato"
-                                    ]?.valore?.toLocaleString() || "0"}
-                                </span>
-                            </div>
-
-                            <div>
-                                <h4 className="font-semibold">
-                                    Valore Virtuali
-                                </h4>
-                                <span className="text-gray-700 text-md">
-                                    €{" "}
-                                    {details.autoNuove[
-                                        "Virtuale"
-                                    ]?.valore?.toLocaleString() || "0"}
-                                </span>
-                            </div> */}
                         </div>
                     </div>
                 )}
@@ -97,18 +58,10 @@ export default function VehiclesXBrandSummary({ option, brand, details }) {
                                     Usate In Stock
                                 </h4>
                                 <span className="text-gray-700 text-md">
-                                    {details.autoUsate.Generale?.count || 0}{" "}
+                                    {details.autoUsate[option.toLowerCase().replace(' ', '_')]?.count || 0}{" "}
                                     unità
                                 </span>
                             </div>
-
-                            {/* <div className="border-b pb-2">
-                                <h4 className="font-semibold">Assegnato</h4>
-                                <span className="text-gray-700 text-md">
-                                    {details.autoUsate["Assegnato"]?.count || 0}{" "}
-                                    unità
-                                </span>
-                            </div> */}
                         </div>
 
                         <div className="space-y-4 text-end">
@@ -116,26 +69,20 @@ export default function VehiclesXBrandSummary({ option, brand, details }) {
                                 <h4 className="font-semibold">Valore Usate</h4>
                                 <span className="text-gray-700 text-md">
                                     {euro.format(
-                                        details.autoUsate.Generale?.valore ||
+                                        details.autoUsate[option.toLowerCase().replace(' ', '_')]?.valore ||
                                         "0"
                                     )}
                                 </span>
                             </div>
-
-                            {/* <div className="border-b pb-2">
-                                <h4 className="font-semibold">
-                                    Valore Assegnato
-                                </h4>
-                                <span className="text-gray-700 text-md">
-                                    €{" "}
-                                    {details.autoUsate[
-                                        "Assegnato"
-                                    ]?.valore?.toLocaleString() || "0"}
-                                </span>
-                            </div> */}
                         </div>
                     </div>
                 )}
+                <div className="mt-9 flex justify-end">
+                    <Link className="flex items-center text-sm" to={brand !== "DALMA_USATO" ? "/infinity_interno" : "/infinity_interno_usate"} onClick={() => setSelectedFilters(prev => !prev.includes('marca') ? [...prev, 'marca'] : prev.filter(e => e !== 'marca'))}>
+                        <span className="text-red-700">Scopri</span>
+                        <ArrowRight className="text-red-700" width={18} />
+                    </Link>
+                </div>
             </CardContent>
         </Card>
     );

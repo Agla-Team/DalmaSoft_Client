@@ -17,6 +17,8 @@ export const VehiclesContextProvider = ({ children }) => {
     const [vehicleInDalma, setVehicleInDalma] = useState([]);
     const [vehicleInDalmaLoading, setVehicleInDalmaLoading] = useState(false);
 
+    const [selectedFilters, setSelectedFilters] = useState([]);
+
     //* ==> Recupera i dati dei veicoli presenti in sede
     const getAllVehicleInDalma = async () => {
         try {
@@ -38,6 +40,8 @@ export const VehiclesContextProvider = ({ children }) => {
                 `${backUrl}/api/auto/autogest`,
                 localStorage.getItem("token")
             );
+            console.log(response);
+
 
             setOwnedVehicleDataSummaryLoading(false);
             setOwnedVehicleDataSummary(response);
@@ -115,7 +119,10 @@ export const VehiclesContextProvider = ({ children }) => {
 
                 getAllVehicleInDalma,
                 vehicleInDalma,
-                vehicleInDalmaLoading
+                vehicleInDalmaLoading,
+
+                selectedFilters,
+                setSelectedFilters,
             }}
         >
             {children}

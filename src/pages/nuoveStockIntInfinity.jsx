@@ -16,17 +16,35 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { VehiclesContext } from "@/context/vehiclesContext";
+import VehiclesDetailsCard from "@/components/VehiclesDetailsCard";
+import { euro } from "@/lib/utils";
+
+const possibleFilters = [
+  "marca",
+  "modello",
+  "versione",
+  "linea",
+  "targa",
+  "telaio",
+  "alimentazione",
+  "ubicazione"
+];
 
 export default function AutoTable() {
   const {
     getAllVehicleInDalma,
-    vehicleInDalma
+    vehicleInDalma,
+    selectedFilters,
+    setSelectedFilters
   } = useContext(VehiclesContext);
+  console.log(selectedFilters);
+
 
   const [expandedRow, setExpandedRow] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const rowsPerPage = 20;
+
 
   useEffect(() => {
     getAllVehicleInDalma();
@@ -62,70 +80,160 @@ export default function AutoTable() {
     <div className="p-6">
 
       {/* 5 Card Principali */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 pb-4">
-        <Card className="border border-red-700 rounded-md">
-          <CardHeader className="p-2 bg-gradient-to-br from-red-800 to-red-700 rounded-t">
-            <CardTitle className="text-sm text-white font-light">Auto In Stock presenti in DALMA</CardTitle>
-          </CardHeader>
-          <CardContent className="p-4 pt-1">
-            <p className="text-2xl font-bold">{vehicleInDalma.totaleAuto} veicoli</p>
-            <p className="text-lg text-gray-500">Valore: €{vehicleInDalma.autoConLogo?.reduce((acc, car) => acc + (car.pricePlusVat || 0), 0).toLocaleString() || "0,00"}</p>
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 pb-4 mb-12">
+        <VehiclesDetailsCard
+          title="Auto In Stock presenti in DALMA"
+          count={vehicleInDalma.totaleAuto}
+          value={euro.format(vehicleInDalma.autoConLogo?.reduce((acc, car) => acc + (car.pricePlusVat || 0), 0) || 0)}
+        />
 
-        <Card className="border border-yellow-600 rounded-md">
-          <CardHeader className="p-2 bg-gradient-to-br from-yellow-600 to-yellow-500 rounded-t">
-            <CardTitle className="text-sm text-white font-light">{vehicleInDalma.conteggioPerSede?.[0]?.sede || "-"}</CardTitle>
-          </CardHeader>
-          <CardContent className="p-4 pt-1">
-            <p className="text-2xl font-bold">{vehicleInDalma.conteggioPerSede?.[0]?.numero_auto || 0} {vehicleInDalma.conteggioPerSede?.[0]?.numero_auto === 1 ? "veicolo" : "veicoli"}</p>
-            <p className="text-lg text-gray-500">Valore: €{vehicleInDalma.conteggioPerSede?.[0]?.totale_prezzo.toLocaleString() || "0,00"}</p>
-          </CardContent>
-        </Card>
+        <VehiclesDetailsCard
+          title={vehicleInDalma.conteggioPerSede?.[0]?.sede.replace('_', ' ') || "-"}
+          count={vehicleInDalma.conteggioPerSede?.[0]?.numero_auto || 0}
+          value={euro.format(vehicleInDalma.conteggioPerSede?.[0]?.totale_prezzo || 0)}
+        />
 
-        <Card className="border border-yellow-600 rounded-md">
-          <CardHeader className="p-2 bg-gradient-to-br from-yellow-600 to-yellow-500 rounded-t">
-            <CardTitle className="text-sm text-white font-light">{vehicleInDalma.conteggioPerSede?.[1]?.sede || "-"}</CardTitle>
-          </CardHeader>
-          <CardContent className="p-4 pt-1">
-            <p className="text-2xl font-bold">{vehicleInDalma.conteggioPerSede?.[1]?.numero_auto || 0} {vehicleInDalma.conteggioPerSede?.[1]?.numero_auto === 1 ? "veicolo" : "veicoli"}</p>
-            <p className="text-lg text-gray-500">Valore: €{vehicleInDalma.conteggioPerSede?.[1]?.totale_prezzo.toLocaleString() || "0,00"}</p>
-          </CardContent>
-        </Card>
+        <VehiclesDetailsCard
+          title={vehicleInDalma.conteggioPerSede?.[1]?.sede.replace('_', ' ') || "-"}
+          count={vehicleInDalma.conteggioPerSede?.[1]?.numero_auto || 0}
+          value={euro.format(vehicleInDalma.conteggioPerSede?.[1]?.totale_prezzo || 0)}
+        />
 
-        <Card className="border border-yellow-600 rounded-md">
-          <CardHeader className="p-2 bg-gradient-to-br from-yellow-600 to-yellow-500 rounded-t">
-            <CardTitle className="text-sm text-white font-light">{vehicleInDalma.conteggioPerSede?.[2]?.sede || "-"}</CardTitle>
-          </CardHeader>
-          <CardContent className="p-4 pt-1">
-            <p className="text-2xl font-bold">{vehicleInDalma.conteggioPerSede?.[2]?.numero_auto || 0} {vehicleInDalma.conteggioPerSede?.[2]?.numero_auto === 1 ? "veicolo" : "veicoli"}</p>
-            <p className="text-lg text-gray-500">Valore: €{vehicleInDalma.conteggioPerSede?.[2]?.totale_prezzo.toLocaleString() || "0"}</p>
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="col-span-2 pb-4">
-        <Label htmlFor="search">Cerca</Label>
-        <Input
-          id="search"
-          type="text"
-          placeholder="Cerca per Marca, Telaio, Modello, Targa..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full p-2 bg-gradient-to-br from-gray-200 to-gray-100 text-black border rounded-md"
+        <VehiclesDetailsCard
+          title={vehicleInDalma.conteggioPerSede?.[2]?.sede.replace('_', ' ') || "-"}
+          count={vehicleInDalma.conteggioPerSede?.[2]?.numero_auto || 0}
+          value={euro.format(vehicleInDalma.conteggioPerSede?.[2]?.totale_prezzo || 0)}
         />
       </div>
 
-      <Card className="flex-1 border border-slate-700 rounded-md p-0">
-        <CardHeader className="p-2 bg-gradient-to-br from-slate-600 to-slate-500 rounded-t">
-          <CardTitle className="text-sm text-white font-light">
-            Lista Auto in Stock presenti in DALMA
-          </CardTitle>
-        </CardHeader>
+      <div className="flex flex-col mb-4 gap-9">
+
+        <div className="flex items-center justify-start gap-3">
+          {
+            possibleFilters.map((filter, idx) => (
+              <button key={idx} className={`text-sm  px-3 py-1  rounded ${selectedFilters.includes(filter) ? 'bg-green-100/50 text-green-500' : 'bg-gray-100/50 text-gray-500'}`} onClick={() => setSelectedFilters(prev => {
+                return !prev.includes({ title: filter }) ? [...prev, { title: filter, value: '' }] : prev.filter(e => e.title !== filter);
+              })}>
+                {filter}
+              </button>
+            ))
+          }
+        </div>
+
+        <div className="flex items-center justify-start gap-3 overflow-x-scroll">
+          {
+            // Filtro marca
+            selectedFilters.includes({ title: 'marca' }) && (
+              <div>
+                <select className="py-2 px-4 border rounded-sm outline-none">
+                  <option value="">Citroen</option>
+                  <option value="">Fiat</option>
+                </select>
+              </div>
+            )
+          }
+
+          {
+            // Filtro modello
+            selectedFilters.includes({ title: 'modello' }) && (
+              <div>
+                <select className="py-2 px-4 border rounded-sm outline-none">
+                  <option value="">C3 Aircross</option>
+                  <option value="">Jumpy</option>
+                </select>
+              </div>
+            )
+          }
+
+          {
+            // Filtro versione
+            selectedFilters.includes({ title: 'versione' }) && (
+              <div>
+                <select className="py-2 px-4 border rounded-sm outline-none">
+                  <option value="">	C3 Aircross 1.2 puretech Shine s&s 110cv</option>
+                </select>
+              </div>
+            )
+          }
+
+          {
+            // Filtro linea
+            selectedFilters.includes({ title: 'linea' }) && (
+              <div>
+                <select className="py-2 px-4 border rounded-sm outline-none">
+                  <option value="">Prodotto normale</option>
+                  <option value="">Prodotto DEMO</option>
+                </select>
+              </div>
+            )
+          }
+
+          {
+            // Filtro targa
+            selectedFilters.includes({ title: 'targa' }) && (
+              <div className="min-w-[250px]">
+                <Input
+                  id="search"
+                  type="text"
+                  placeholder="Inserisci targa..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="p-2 text-black border rounded-sm shadow-none outline-none"
+                />
+              </div>
+            )
+          }
+
+          {
+            // Filtro targa
+            selectedFilters.includes({ title: 'telaio' }) && (
+              <div className="min-w-[250px]">
+                <Input
+                  id="search"
+                  type="text"
+                  placeholder="Inserisci telaio..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="p-2 text-black border rounded-sm shadow-none outline-none"
+                />
+              </div>
+            )
+          }
+
+          {
+            // Filtro alimentazione
+            selectedFilters.includes('alimentazione') && (
+              <div>
+                <select className="py-2 px-4 border rounded-sm outline-none">
+                  <option value="">Diesel</option>
+                  <option value="">Benzina Verde</option>
+                </select>
+              </div>
+            )
+          }
+
+          {
+            // Filtro ubicazione
+            selectedFilters.includes('ubicazione') && (
+              <div>
+                <select className="py-2 px-4 border rounded-sm outline-none">
+                  <option value="">DALMA DONIZETTI 3</option>
+                  <option value="">DALMA_DONIZETTI 6</option>
+                </select>
+              </div>
+            )
+          }
+
+
+        </div>
+      </div>
+
+      <Card className="flex-1 rounded-md overflow-hidden shadow-none border-none">
+
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <Table>
-              <TableHeader className="bg-gray-200">
+              <TableHeader className="bg-gray-100 border-none">
                 <TableRow>
                   <TableHead></TableHead>
                   <TableHead className="text-red-800">Marca</TableHead>
@@ -144,7 +252,7 @@ export default function AutoTable() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {vehicleInDalma ? (
+                {!vehicleInDalma ? (
                   [...Array(5)].map((_, index) => (
                     <TableRow key={index}>
                       {Array(15).fill().map((_, i) => (
