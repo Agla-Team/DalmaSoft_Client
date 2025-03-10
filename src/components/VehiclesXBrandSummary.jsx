@@ -15,15 +15,13 @@ export default function VehiclesXBrandSummary({ brand, details }) {
                         {brand.replace("_", " ")}
                     </h3>
 
-                    <div className="w-20 h-20 bg-gray-100"></div>
-                    {/* <img
-                    src={
-                        details.logo_url ||
-                        "./logo/default.png"
-                    }
-                    alt={brand}
-                    className="w-20 h-20 object-contain mr-auto"
-                /> */}
+                    <div className="w-20 h-20">
+                        <img
+                            src={details.logo_url || "./logo/default.png"}
+                            alt={brand}
+                            className="w-full h-full object-cover object-center"
+                        />
+                    </div>
                 </div>
             </CardHeader>
             <CardContent>
